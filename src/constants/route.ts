@@ -13,14 +13,14 @@ const SERVICE_ROUTE = {
     CREATE: '/timeline/create',
     DONE: '/timeline/create/done',
     HOME: '/timeline/$timelineId',
-    SESSION: {
-      CREATE: '/session/create',
-      HOME: '/session/$sessionId',
-      EDIT: '/session/$sessionId/edit',
-    },
     SETTING: {
       INDEX: '/timeline/$timelineId/setting',
       MEMBER: '/timeline/$timelineId/setting/member',
     },
+  },
+  SESSION: {
+    CREATE: '/session/create',
+    HOME: '/session/$sessionId',
+    EDIT: '/session/$sessionId/edit',
   },
 }
