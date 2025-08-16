@@ -1,20 +1,20 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
+import TextTransition, { presets } from 'react-text-transition';
 
-const CATCHPHRASE = ['Diary와 Our의 합성어', '함께 쓰는 일기'];
+const CATCHPHRASE = [
+  'Diary와 Our의 합성어',
+  '함께 쓰는 일기',
+  '다이어리',
+  '차차 생각해볼 예정',
+];
 
 export const IntroTemplate = () => {
   const [index, setIndex] = useState(0);
-  const currentCatchphrase = useMemo(() => {
-    return CATCHPHRASE[index];
-  }, [index]);
 
   useEffect(() => {
     const couter = setInterval(() => {
-      setIndex((prev) => {
-        const newIndex = prev + 1;
-        return newIndex >= CATCHPHRASE.length ? 0 : newIndex;
-      });
-    }, 5000);
+      setIndex((prev) => prev + 1);
+    }, 3000);
 
     return () => {
       clearInterval(couter);
@@ -25,8 +25,13 @@ export const IntroTemplate = () => {
     <div className="flex h-full w-full bg-blue-500">
       <div className="flex-3/5 bg-amber-200">
         <p className="absolute bottom-16 left-8 text-6xl font-bold">
-          Dioury는 <br />
-          {currentCatchphrase} <br />
+          Dioury는
+          <br />
+          <div className="">
+            <TextTransition springConfig={presets.default} inline>
+              {CATCHPHRASE[index % CATCHPHRASE.length]}
+            </TextTransition>
+          </div>
           입니다.
         </p>
       </div>
