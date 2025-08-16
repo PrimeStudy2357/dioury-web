@@ -1,10 +1,10 @@
-import { createFileRoute } from '@tanstack/react-router'
-import { IntroTemplate } from '../components/intro'
+import { createFileRoute } from '@tanstack/react-router';
+import { IntroTemplate } from '../components/intro';
 
 export const Route = createFileRoute('/')({
   component: App,
-})
+});
 
 function App() {
-  return <IntroTemplate />
+  return <IntroTemplate />;
 }

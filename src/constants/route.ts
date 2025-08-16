@@ -23,4 +23,4 @@ const SERVICE_ROUTE = {
     HOME: '/session/$sessionId',
     EDIT: '/session/$sessionId/edit',
   },
-}
+};
