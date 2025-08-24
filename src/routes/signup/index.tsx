@@ -1,9 +1,15 @@
 import { createFileRoute } from '@tanstack/react-router';
+import { IntroTemplate } from '../../components/intro/IntroTemplate';
+import { Signup } from '../../components/intro/signup';
 
 export const Route = createFileRoute('/signup/')({
   component: RouteComponent,
 });
 
 function RouteComponent() {
-  return <div>Hello "/signup/"!</div>;
+  return (
+    <IntroTemplate>
+      <Signup />
+    </IntroTemplate>
+  );
 }
