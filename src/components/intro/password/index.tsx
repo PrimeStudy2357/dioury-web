@@ -8,7 +8,9 @@ export const FindPW = () => {
     <>
       <div className="flex justify-center items-center flex-1/2">
         <p className="text-8xl font-bold text-center">
-          비밀번호<br></br>찾기
+          비밀번호
+          <br />
+          찾기
         </p>
       </div>
       <div className="flex gap-4 justify-center items-center flex-col flex-1/2">
