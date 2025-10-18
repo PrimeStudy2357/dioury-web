@@ -43,7 +43,7 @@ export const Login = () => {
         </Link>
         <div className="flex flex-col w-96 items-end">
           <Link to="/signup">계정이 없으신가요?</Link>
-          <Link to="/">비밀번호를 잊었습니까?</Link>
+          <Link to="/login/password">비밀번호를 잊었습니까?</Link>
           <Link to="/">뒤로가기</Link>
         </div>
       </div>
