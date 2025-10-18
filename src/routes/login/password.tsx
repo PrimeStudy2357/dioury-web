@@ -1,3 +1,5 @@
+import { IntroTemplate } from '@/components/intro/IntroTemplate';
+import { FindPW } from '../../components/intro/password';
 import { createFileRoute } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/login/password')({
@@ -5,5 +7,9 @@ export const Route = createFileRoute('/login/password')({
 });
 
 function RouteComponent() {
-  return <div>Hello "/login/password"!</div>;
+  return (
+    <IntroTemplate>
+      <FindPW />
+    </IntroTemplate>
+  );
 }
