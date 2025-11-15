@@ -74,6 +74,43 @@ export const Signup = () => {
     [],
   );
 
+  /**
+   * 현재 사용자의 입력이 요청 가능한지 확인한다.
+   */
+  const checkRequestable = () => {
+    if (!emailId || !emailDomain) {
+      // 이메일 필드 입력 여부 확인
+      return false;
+    }
+
+    if (!isAuthOk) {
+      // 인증확인 통과 여부 확인
+      return false;
+    }
+
+    if (!password || !passwordCheck || !isValidPassword || !isPasswordChecked) {
+      // 비밀번호 필드 입력 여부 확인
+      return false;
+    }
+
+    if (!nickname || !isValidNickname) {
+      // 유효 닉네임 입력 확인
+      return false;
+    }
+
+    return true;
+  };
+
+  const handleClickSignUp = () => {
+    const isRequestable = checkRequestable();
+    if (!isRequestable) {
+      alert('입력을 확인해주세요.');
+    }
+
+    // alert('가입되었습니다.');
+    // window.location.href = '/login';
+  };
+
   return (
     <>
       <div className="flex flex-1/2 justify-center items-center">
@@ -212,10 +249,7 @@ export const Signup = () => {
         <div className="flex flex-col w-full min-w-0 items-center justify-center gap-2">
           <div className="flex w-full gap-4 justify-between mt-8">
             <button
-              onClick={() => {
-                alert('가입되었습니다.');
-                window.location.href = '/login';
-              }}
+              onClick={handleClickSignUp}
               className="flex items-center justify-center w-full p-1 text-2xl font-bold text-white bg-blue-400"
             >
               가입
