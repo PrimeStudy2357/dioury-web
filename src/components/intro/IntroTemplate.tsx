@@ -24,7 +24,7 @@ export const IntroTemplate = ({ children }: PropsWithChildren) => {
   return (
     <div className="flex h-full w-full bg-blue-500">
       <div className="flex-3/5 bg-amber-200">
-        <p className="absolute bottom-16 left-8 text-6xl font-bold">
+        <div className="absolute bottom-16 left-8 text-6xl font-bold">
           Dioury는
           <br />
           <div className="">
@@ -33,7 +33,7 @@ export const IntroTemplate = ({ children }: PropsWithChildren) => {
             </TextTransition>
           </div>
           입니다.
-        </p>
+        </div>
       </div>
       <div className="flex flex-col flex-2/5 bg-emerald-200">{children}</div>
     </div>
