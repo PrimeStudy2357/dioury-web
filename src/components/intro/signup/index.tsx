@@ -144,7 +144,7 @@ export const Signup = () => {
       return false;
     }
 
-    if (!nickname || !isValidNickname) {
+    if (!nickname || !isValidNickname || !isUnique) {
       // 유효 닉네임 입력 확인
       return false;
     }
