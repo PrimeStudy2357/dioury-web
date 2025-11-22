@@ -17,11 +17,17 @@ export const Signup = () => {
   const [emailId, setEmailId] = useState('');
   const [emailDomain, setEmailDomain] = useState('');
   const [isAuthRequested, setIsAuthRequested] = useState(false);
+  const [mailInputMsg, setMailInputMsg] = useState('');
+  const [authCheckMsg, setAuthCheckMsg] = useState('');
   const [authCode, setAuthCode] = useState('');
   const [isAuthOk, setIsAuthOk] = useState(false);
   const [password, setPassword] = useState('');
   const [passwordCheck, setPasswordCheck] = useState('');
   const [nickname, setNickname] = useState('');
+  const [isValidNickname, setIsValidNickname] = useState(true);
+  const [validNicknameMsg, setValidNicknameMsg] = useState(
+    '최소 2글자 이상 최대 8글자 이하',
+  );
   const [isUnique, setIsUnique] = useState(false);
   const [funnel, setFunnel] = useState('');
   const [purpose, setPurpose] = useState('');
@@ -51,15 +57,12 @@ export const Signup = () => {
     [password],
   );
 
-  const [isValidNickname, setIsValidNickname] = useState(true);
-  const [validNicknameMsg, setValidNicknameMsg] = useState(
-    '최소 2글자 이상 최대 8글자 이하',
-  );
   const handleChangeNickname = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       // 닉네임 상태 변경
       const newVal = event.target.value;
       setNickname(newVal);
+      setIsUnique(false);
 
       // 닉네임 길이 체크
       const isValid = checkNicknameLength(newVal);
@@ -73,6 +76,54 @@ export const Signup = () => {
     },
     [],
   );
+
+  /** 인증요청 버튼 클릭 시 */
+  const handleMailAuthRequested = () => {
+    if (isAuthRequested) {
+      return;
+    }
+
+    try {
+      // TODO 메일 인증 API 호출
+      const resultMsg = '인증 요청 메일이 발송되었습니다.';
+
+      setIsAuthRequested(true);
+      setMailInputMsg(resultMsg);
+    } catch (error) {}
+  };
+
+  // TODO: 임시 인증번호
+  const [tmpAuthCode] = useState('235711');
+
+  /** 인증 확인 버튼 클릭 시 */
+  const handleAuthCheck = () => {
+    if (!isAuthRequested || isAuthOk) {
+      return;
+    }
+
+    try {
+      if (tmpAuthCode === authCode) {
+        setAuthCheckMsg('인증 완료하였습니다.');
+        setIsAuthOk(true);
+      } else {
+        setAuthCheckMsg('인증 번호를 다시 확인해주세요.');
+      }
+    } catch (error) {}
+  };
+
+  /** 닉네임 중복 확인 클릭 시 */
+  const handleCheckNickname = () => {
+    if (!isValidNickname || !nickname) {
+      return;
+    }
+
+    try {
+      const resultMsg = '사용 가능한 닉네임입니다.';
+
+      setValidNicknameMsg(resultMsg);
+      setIsUnique(true);
+    } catch (error) {}
+  };
 
   /**
    * 현재 사용자의 입력이 요청 가능한지 확인한다.
@@ -107,8 +158,8 @@ export const Signup = () => {
       alert('입력을 확인해주세요.');
     }
 
-    // alert('가입되었습니다.');
-    // window.location.href = '/login';
+    alert('가입되었습니다.');
+    window.location.href = '/login';
   };
 
   return (
@@ -126,6 +177,7 @@ export const Signup = () => {
                 value={emailId}
                 onChange={(e) => setEmailId(e.target.value)}
                 type="text"
+                disabled={isAuthRequested}
               />
               <p className="text-2xl">@</p>
               <input
@@ -134,15 +186,17 @@ export const Signup = () => {
                 value={emailDomain}
                 onChange={(e) => setEmailDomain(e.target.value)}
                 type="text"
+                disabled={isAuthRequested}
               />
             </div>
-            <button className="flex items-center justify-center p-1 text-2xl min-w-28 font-bold text-white bg-blue-400">
+            <button
+              className="flex items-center justify-center p-1 text-2xl min-w-28 font-bold text-white bg-blue-400"
+              onClick={handleMailAuthRequested}
+            >
               인증요청
             </button>
           </div>
-          <div className="flex w-full justify-end">
-            <p>{'이미 존재하는 이메일입니다.'}</p>
-          </div>
+          <div className="flex w-full justify-end">{<p>{mailInputMsg}</p>}</div>
         </div>
         <div className="flex flex-col w-full min-w-0 items-center justify-center gap-2">
           <div className="flex w-full gap-4 justify-between">
@@ -153,14 +207,18 @@ export const Signup = () => {
                 value={authCode}
                 onChange={(e) => setAuthCode(e.target.value)}
                 type="text"
+                disabled={isAuthOk}
               />
             </div>
-            <button className="flex items-center justify-center p-1 text-2xl min-w-28 font-bold text-white bg-blue-400">
+            <button
+              className="flex items-center justify-center p-1 text-2xl min-w-28 font-bold text-white bg-blue-400"
+              onClick={handleAuthCheck}
+            >
               인증확인
             </button>
           </div>
           <div className="flex w-full justify-end">
-            <p>{'인증 번호가 맞지 않습니다.'}</p>
+            <p>{authCheckMsg}</p>
           </div>
         </div>
         <div className="flex flex-col w-full min-w-0 items-center justify-center gap-2">
@@ -207,7 +265,10 @@ export const Signup = () => {
                 type="text"
               />
             </div>
-            <button className="flex items-center justify-center p-1 text-2xl min-w-28 font-bold text-white bg-blue-400">
+            <button
+              className="flex items-center justify-center p-1 text-2xl min-w-28 font-bold text-white bg-blue-400"
+              onClick={handleCheckNickname}
+            >
               중복확인
             </button>
           </div>
