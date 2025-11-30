@@ -1,6 +1,8 @@
 import { Link } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React, { useCallback, useState } from 'react';
+import { requestSignUp } from '../../../api/signup';
+import { isAxiosError } from 'axios';
 
 const checkValidPassword = (input: string) => {
   // 영문자, 숫자, 특수문자 포함 + 8자리 이상
@@ -152,10 +154,31 @@ export const Signup = () => {
     return true;
   };
 
-  const handleClickSignUp = () => {
+  const handleClickSignUp = async () => {
     const isRequestable = checkRequestable();
     if (!isRequestable) {
       alert('입력을 확인해주세요.');
+      return;
+    }
+
+    try {
+      const response = await requestSignUp({
+        email: '',
+        password: '',
+        nickname: '',
+        funnel: '',
+        purpose: '',
+      });
+    } catch (error) {
+      if (isAxiosError(error) && error.response?.data?.message) {
+        alert(error.response?.data?.message);
+      } else {
+        alert('가입 요청에 실패하였습니다.');
+        console.error(
+          '가입 요청 중 원인을 알 수 없는 오류가 발생하였습니다. :: ',
+        );
+        console.error(error);
+      }
       return;
     }
 
