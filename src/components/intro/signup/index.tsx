@@ -162,12 +162,12 @@ export const Signup = () => {
     }
 
     try {
-      const response = await requestSignUp({
-        email: '',
-        password: '',
-        nickname: '',
-        funnel: '',
-        purpose: '',
+      await requestSignUp({
+        email: `${emailId}@${emailDomain}`,
+        password: password,
+        nickname: nickname,
+        funnel: funnel === '' ? 'TBD' : funnel,
+        purpose: purpose === '' ? 'TBD' : purpose,
       });
     } catch (error) {
       if (isAxiosError(error) && error.response?.data?.message) {
