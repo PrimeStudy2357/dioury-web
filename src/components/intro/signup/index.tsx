@@ -156,6 +156,7 @@ export const Signup = () => {
     const isRequestable = checkRequestable();
     if (!isRequestable) {
       alert('입력을 확인해주세요.');
+      return;
     }
 
     alert('가입되었습니다.');
