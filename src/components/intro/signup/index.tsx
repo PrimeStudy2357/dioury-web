@@ -1,7 +1,7 @@
 import { Link } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React, { useCallback, useState } from 'react';
-import { requestSignUp } from '../../../api/signup';
+import { requestEmailAuth, requestSignUp } from '../../../api/signup';
 import { isAxiosError } from 'axios';
 
 const checkValidPassword = (input: string) => {
@@ -80,18 +80,37 @@ export const Signup = () => {
   );
 
   /** 인증요청 버튼 클릭 시 */
-  const handleMailAuthRequested = () => {
+  const handleMailAuthRequested = async () => {
+    if (!emailId || !emailDomain) {
+      // 이메일 필드 입력 여부 확인
+      return;
+    }
+
     if (isAuthRequested) {
       return;
     }
 
     try {
-      // TODO 메일 인증 API 호출
+      await requestEmailAuth(`${emailId}@${emailDomain}`);
       const resultMsg = '인증 요청 메일이 발송되었습니다.';
 
       setIsAuthRequested(true);
       setMailInputMsg(resultMsg);
-    } catch (error) {}
+    } catch (error) {
+      let resultMsg = '';
+      if (isAxiosError(error) && error.response?.data?.message) {
+        resultMsg = error.response?.data?.message;
+      } else {
+        resultMsg = '인증 요청에 실패하였습니다.';
+        console.error(
+          '인증 요청 중 원인을 알 수 없는 오류가 발생하였습니다. :: ',
+        );
+        console.error(error);
+      }
+
+      setIsAuthRequested(false);
+      setMailInputMsg(resultMsg);
+    }
   };
 
   // TODO: 임시 인증번호
