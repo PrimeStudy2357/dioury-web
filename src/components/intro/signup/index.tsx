@@ -38,6 +38,7 @@ export const Signup = () => {
   const [funnel, setFunnel] = useState('');
   const [purpose, setPurpose] = useState('');
   const [purposeDetail, setPurposeDetail] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const [isValidPassword, setIsValidPassword] = useState(true);
   const handleChangePassword = useCallback(
@@ -85,6 +86,10 @@ export const Signup = () => {
 
   /** 인증요청 버튼 클릭 시 */
   const handleMailAuthRequested = async () => {
+    if (isLoading) {
+      return;
+    }
+
     if (!emailId || !emailDomain) {
       // 이메일 필드 입력 여부 확인
       return;
@@ -95,6 +100,7 @@ export const Signup = () => {
     }
 
     try {
+      setIsLoading(true);
       await requestEmailAuth(`${emailId}@${emailDomain}`);
       const resultMsg = '인증 요청 메일이 발송되었습니다.';
 
@@ -114,16 +120,23 @@ export const Signup = () => {
 
       setIsAuthRequested(false);
       setMailInputMsg(resultMsg);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   /** 인증 확인 버튼 클릭 시 */
   const handleAuthCheck = async () => {
+    if (isLoading) {
+      return;
+    }
+
     if (!isAuthRequested || isAuthOk) {
       return;
     }
 
     try {
+      setIsLoading(true);
       await requestAuthCheck(`${emailId}@${emailDomain}`, authCode);
 
       setAuthCheckMsg('인증 완료하였습니다.');
@@ -141,6 +154,8 @@ export const Signup = () => {
       }
 
       setAuthCheckMsg(resultMsg);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -186,6 +201,9 @@ export const Signup = () => {
   };
 
   const handleClickSignUp = async () => {
+    if (isLoading) {
+      return;
+    }
     const isRequestable = checkRequestable();
     if (!isRequestable) {
       alert('입력을 확인해주세요.');
@@ -193,6 +211,7 @@ export const Signup = () => {
     }
 
     try {
+      setIsLoading(true);
       await requestSignUp({
         email: `${emailId}@${emailDomain}`,
         password: password,
@@ -200,6 +219,7 @@ export const Signup = () => {
         funnel: funnel === '' ? 'TBD' : funnel,
         purpose: purpose === '' ? 'TBD' : purpose,
       });
+      setIsLoading(false);
     } catch (error) {
       if (isAxiosError(error) && error.response?.data?.message) {
         alert(error.response?.data?.message);
@@ -210,6 +230,7 @@ export const Signup = () => {
         );
         console.error(error);
       }
+      setIsLoading(false);
       return;
     }
 
