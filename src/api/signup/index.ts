@@ -14,3 +14,13 @@ export const requestSignUp = async (data: SignUpType) => {
 export const requestEmailAuth = async (email: string) => {
   return await APIInstance.post('/signup/authEmail', { email: email });
 };
+
+/**
+ * 인증번호 확인 요청을 보낸다.
+ */
+export const requestAuthCheck = async (email: string, code: string) => {
+  return await APIInstance.post('/signup/authEmailCheck', {
+    email: email,
+    code: code,
+  });
+};

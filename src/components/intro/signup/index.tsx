@@ -1,7 +1,11 @@
 import { Link } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React, { useCallback, useState } from 'react';
-import { requestEmailAuth, requestSignUp } from '../../../api/signup';
+import {
+  requestAuthCheck,
+  requestEmailAuth,
+  requestSignUp,
+} from '../../../api/signup';
 import { isAxiosError } from 'axios';
 
 const checkValidPassword = (input: string) => {
@@ -113,23 +117,31 @@ export const Signup = () => {
     }
   };
 
-  // TODO: 임시 인증번호
-  const [tmpAuthCode] = useState('235711');
-
   /** 인증 확인 버튼 클릭 시 */
-  const handleAuthCheck = () => {
+  const handleAuthCheck = async () => {
     if (!isAuthRequested || isAuthOk) {
       return;
     }
 
     try {
-      if (tmpAuthCode === authCode) {
-        setAuthCheckMsg('인증 완료하였습니다.');
-        setIsAuthOk(true);
+      await requestAuthCheck(`${emailId}@${emailDomain}`, authCode);
+
+      setAuthCheckMsg('인증 완료하였습니다.');
+      setIsAuthOk(true);
+    } catch (error) {
+      let resultMsg = '';
+      if (isAxiosError(error) && error.response?.data?.message) {
+        resultMsg = error.response?.data?.message;
       } else {
-        setAuthCheckMsg('인증 번호를 다시 확인해주세요.');
+        resultMsg = '인증 번호 확인에 실패하였습니다.';
+        console.error(
+          '인증 번호 확인 중 원인을 알 수 없는 오류가 발생하였습니다. :: ',
+        );
+        console.error(error);
       }
-    } catch (error) {}
+
+      setAuthCheckMsg(resultMsg);
+    }
   };
 
   /** 닉네임 중복 확인 클릭 시 */
