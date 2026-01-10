@@ -7,6 +7,7 @@ import {
   requestSignUp,
 } from '../../../api/signup';
 import { isAxiosError } from 'axios';
+import { requestCheckNickname } from '../../../api/user';
 
 const checkValidPassword = (input: string) => {
   // 영문자, 숫자, 특수문자 포함 + 8자리 이상
@@ -160,17 +161,38 @@ export const Signup = () => {
   };
 
   /** 닉네임 중복 확인 클릭 시 */
-  const handleCheckNickname = () => {
-    if (!isValidNickname || !nickname) {
+  const handleCheckNickname = async () => {
+    if (!isValidNickname || !nickname || isLoading) {
       return;
     }
 
+    setIsLoading(true);
+
     try {
+      await requestCheckNickname(nickname);
+
       const resultMsg = '사용 가능한 닉네임입니다.';
 
       setValidNicknameMsg(resultMsg);
       setIsUnique(true);
-    } catch (error) {}
+    } catch (error) {
+      let resultMsg = '';
+      if (isAxiosError(error) && error.response?.data?.message) {
+        resultMsg = error.response?.data?.message;
+      } else {
+        resultMsg = '닉네임 중복 확인에 실패하였습니다.';
+        console.error(
+          '닉네임 중복 확인 중 알 수 없는 오류가 발생하였습니다. :: ',
+        );
+        console.error(error);
+      }
+
+      setValidNicknameMsg(resultMsg);
+      setIsUnique(false);
+      setIsValidNickname(false);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   /**
