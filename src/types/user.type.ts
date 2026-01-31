@@ -7,3 +7,8 @@ export type SignUpType = {
   funnel: string;
   purpose: string;
 };
+
+export type SignInType = {
+  email: string;
+  password: string;
+};
