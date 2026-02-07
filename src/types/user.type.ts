@@ -1,4 +1,7 @@
-export type UserType = {};
+export type UserType = {
+  email: string;
+  nickname: string;
+};
 
 export type SignUpType = {
   email: string;
