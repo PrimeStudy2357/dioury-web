@@ -14,9 +14,5 @@ export const requestCheckNickname = async (nickname: string) => {
  * 쿠키값의 세션 정보를 가지고 로그인 한 사용자의 정보를 불러온다.
  */
 export const requestWhoAmI = async () => {
-  return {
-    nickname: 'anteater1056',
-    email: 'anteater1056@gmail.com',
-  } as UserType;
-  // return await APIInstance.get(`/users/whoami`);
+  return await APIInstance.get<{ user: UserType }>(`/signin/saymyname`);
 };

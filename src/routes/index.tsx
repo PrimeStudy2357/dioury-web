@@ -4,7 +4,7 @@ import { Intro } from '../components/intro';
 
 export const Route = createFileRoute('/')({
   beforeLoad: ({ context }) => {
-    if (context.auth.isAuthenticated) {
+    if (context.isAuthenticated) {
       throw redirect({
         to: '/timeline',
         replace: true,
