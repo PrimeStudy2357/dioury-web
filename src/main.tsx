@@ -7,11 +7,21 @@ import { routeTree } from './routeTree.gen';
 
 import './styles.css';
 import reportWebVitals from './reportWebVitals.ts';
+import { useAuth } from './hooks/useAuth.ts';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { AuthProvider } from './providers/authProvider.tsx';
+
+const queryClient = new QueryClient();
 
 // Create a new router instance
 const router = createRouter({
   routeTree,
-  context: {},
+  context: {
+    isAuthenticated: false,
+    login: () => {},
+    logout: () => {},
+    user: null,
+  },
   defaultPreload: 'intent',
   scrollRestoration: true,
   defaultStructuralSharing: true,
@@ -25,13 +35,37 @@ declare module '@tanstack/react-router' {
   }
 }
 
+function App() {
+  const auth = useAuth();
+
+  return (
+    <RouterProvider
+      router={router}
+      context={{
+        ...auth,
+      }}
+    />
+  );
+}
+
+/** 각종 프로바이더 정의 용도 */
+function Root() {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        <App />
+      </AuthProvider>
+    </QueryClientProvider>
+  );
+}
+
 // Render the app
 const rootElement = document.getElementById('app');
 if (rootElement && !rootElement.innerHTML) {
   const root = ReactDOM.createRoot(rootElement);
   root.render(
     <StrictMode>
-      <RouterProvider router={router} />
+      <Root />
     </StrictMode>,
   );
 }

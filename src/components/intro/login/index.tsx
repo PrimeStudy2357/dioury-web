@@ -1,4 +1,4 @@
-import { Link, useRouter } from '@tanstack/react-router';
+import { Link } from '@tanstack/react-router';
 import IcoShow from '@/assets/icon/icoShow.svg?react';
 import IcoHide from '@/assets/icon/icoHide.svg?react';
 import { useState } from 'react';
@@ -10,8 +10,6 @@ export const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
-  const { navigate } = useRouter();
 
   const handleClickLogin = async () => {
     if (isLoading) {
@@ -31,7 +29,7 @@ export const Login = () => {
     setIsLoading(true);
     try {
       await requestSignIn({ email, password });
-      navigate({ to: '/timeline' });
+      window.location.href = '/';
     } catch (error) {
       if (isAxiosError(error) && error.response?.data?.message) {
         alert(error.response?.data?.message);
