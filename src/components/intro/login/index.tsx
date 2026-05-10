@@ -55,6 +55,11 @@ export const Login = () => {
             placeholder="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                handleClickLogin();
+              }
+            }}
           />
           <input
             type={isPasswordVisible ? 'text' : 'password'}
@@ -62,6 +67,11 @@ export const Login = () => {
             placeholder="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                handleClickLogin();
+              }
+            }}
           />
           <button
             className="absolute bottom-2 right-3"
