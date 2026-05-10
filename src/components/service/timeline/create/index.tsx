@@ -1,16 +1,27 @@
 export const TimelineCreate = () => {
   return (
-    <div>
-      <h1>타임라인 만들기</h1>
-      <table className="table-fixed">
+    <div className="pt-8 px-6 flex flex-col gap-6">
+      <h1 className="text-4xl font-bold">타임라인 만들기</h1>
+      <table
+        className="table-fixed border-t-2 border-b-2
+        [&_tr]:text-2xl
+        [&_tr]:h-18
+        [&_tr]:border-b
+        [&_td:first-child]:font-semibold
+        [&_td_div]:flex
+        [&_input]:border-2
+      "
+      >
         <tbody>
           <tr>
             <td>타임라인 이름</td>
             <td>
-              <input className="border-2" />
+              <input className="w-full" />
             </td>
-            <td>
-              <button>중복 확인</button>
+            <td className="text-right">
+              <button className="bg-black text-white px-10 py-1 text-2xl font-bold">
+                중복 확인
+              </button>
             </td>
           </tr>
           <tr>
@@ -42,19 +53,19 @@ export const TimelineCreate = () => {
           <tr>
             <td>카테고리</td>
             <td>
-              <input className="border-2" />
+              <input />
             </td>
           </tr>
           <tr>
             <td>키워드</td>
             <td>
-              <input className="border-2" />
+              <input />
             </td>
           </tr>
           <tr>
             <td>타임라인 설명</td>
             <td>
-              <textarea className="border-2" />
+              <textarea />
             </td>
           </tr>
           <tr>
@@ -91,8 +102,10 @@ export const TimelineCreate = () => {
           </tr>
         </tbody>
       </table>
-      <div>
-        <button>다 만듦</button>
+      <div className="flex justify-end">
+        <button className="bg-black text-white px-10 py-1 text-3xl font-bold">
+          다 만듦
+        </button>
       </div>
     </div>
   );
