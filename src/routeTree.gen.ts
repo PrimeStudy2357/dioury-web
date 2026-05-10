@@ -13,13 +13,13 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as TimelineIndexRouteImport } from './routes/timeline/index'
 import { Route as SignupIndexRouteImport } from './routes/signup/index'
 import { Route as LoginIndexRouteImport } from './routes/login/index'
-import { Route as TimelineDoneRouteImport } from './routes/timeline/done'
 import { Route as TimelineCreateRouteImport } from './routes/timeline/create'
 import { Route as SignupDoneRouteImport } from './routes/signup/done'
 import { Route as SessionCreateRouteImport } from './routes/session/create'
 import { Route as LoginPasswordRouteImport } from './routes/login/password'
 import { Route as TimelineTimelineIdIndexRouteImport } from './routes/timeline/$timelineId/index'
 import { Route as SessionSessionIdIndexRouteImport } from './routes/session/$sessionId/index'
+import { Route as TimelineCreateDoneRouteImport } from './routes/timeline/create/done'
 import { Route as SessionSessionIdEditRouteImport } from './routes/session/$sessionId/edit'
 import { Route as TimelineTimelineIdSettingIndexRouteImport } from './routes/timeline/$timelineId/setting/index'
 import { Route as TimelineTimelineIdSettingMemberRouteImport } from './routes/timeline/$timelineId/setting/member'
@@ -42,11 +42,6 @@ const SignupIndexRoute = SignupIndexRouteImport.update({
 const LoginIndexRoute = LoginIndexRouteImport.update({
   id: '/login/',
   path: '/login/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const TimelineDoneRoute = TimelineDoneRouteImport.update({
-  id: '/timeline/done',
-  path: '/timeline/done',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TimelineCreateRoute = TimelineCreateRouteImport.update({
@@ -79,6 +74,11 @@ const SessionSessionIdIndexRoute = SessionSessionIdIndexRouteImport.update({
   path: '/session/$sessionId/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TimelineCreateDoneRoute = TimelineCreateDoneRouteImport.update({
+  id: '/done',
+  path: '/done',
+  getParentRoute: () => TimelineCreateRoute,
+} as any)
 const SessionSessionIdEditRoute = SessionSessionIdEditRouteImport.update({
   id: '/session/$sessionId/edit',
   path: '/session/$sessionId/edit',
@@ -102,12 +102,12 @@ export interface FileRoutesByFullPath {
   '/login/password': typeof LoginPasswordRoute
   '/session/create': typeof SessionCreateRoute
   '/signup/done': typeof SignupDoneRoute
-  '/timeline/create': typeof TimelineCreateRoute
-  '/timeline/done': typeof TimelineDoneRoute
+  '/timeline/create': typeof TimelineCreateRouteWithChildren
   '/login': typeof LoginIndexRoute
   '/signup': typeof SignupIndexRoute
   '/timeline': typeof TimelineIndexRoute
   '/session/$sessionId/edit': typeof SessionSessionIdEditRoute
+  '/timeline/create/done': typeof TimelineCreateDoneRoute
   '/session/$sessionId': typeof SessionSessionIdIndexRoute
   '/timeline/$timelineId': typeof TimelineTimelineIdIndexRoute
   '/timeline/$timelineId/setting/member': typeof TimelineTimelineIdSettingMemberRoute
@@ -118,12 +118,12 @@ export interface FileRoutesByTo {
   '/login/password': typeof LoginPasswordRoute
   '/session/create': typeof SessionCreateRoute
   '/signup/done': typeof SignupDoneRoute
-  '/timeline/create': typeof TimelineCreateRoute
-  '/timeline/done': typeof TimelineDoneRoute
+  '/timeline/create': typeof TimelineCreateRouteWithChildren
   '/login': typeof LoginIndexRoute
   '/signup': typeof SignupIndexRoute
   '/timeline': typeof TimelineIndexRoute
   '/session/$sessionId/edit': typeof SessionSessionIdEditRoute
+  '/timeline/create/done': typeof TimelineCreateDoneRoute
   '/session/$sessionId': typeof SessionSessionIdIndexRoute
   '/timeline/$timelineId': typeof TimelineTimelineIdIndexRoute
   '/timeline/$timelineId/setting/member': typeof TimelineTimelineIdSettingMemberRoute
@@ -135,12 +135,12 @@ export interface FileRoutesById {
   '/login/password': typeof LoginPasswordRoute
   '/session/create': typeof SessionCreateRoute
   '/signup/done': typeof SignupDoneRoute
-  '/timeline/create': typeof TimelineCreateRoute
-  '/timeline/done': typeof TimelineDoneRoute
+  '/timeline/create': typeof TimelineCreateRouteWithChildren
   '/login/': typeof LoginIndexRoute
   '/signup/': typeof SignupIndexRoute
   '/timeline/': typeof TimelineIndexRoute
   '/session/$sessionId/edit': typeof SessionSessionIdEditRoute
+  '/timeline/create/done': typeof TimelineCreateDoneRoute
   '/session/$sessionId/': typeof SessionSessionIdIndexRoute
   '/timeline/$timelineId/': typeof TimelineTimelineIdIndexRoute
   '/timeline/$timelineId/setting/member': typeof TimelineTimelineIdSettingMemberRoute
@@ -154,11 +154,11 @@ export interface FileRouteTypes {
     | '/session/create'
     | '/signup/done'
     | '/timeline/create'
-    | '/timeline/done'
     | '/login'
     | '/signup'
     | '/timeline'
     | '/session/$sessionId/edit'
+    | '/timeline/create/done'
     | '/session/$sessionId'
     | '/timeline/$timelineId'
     | '/timeline/$timelineId/setting/member'
@@ -170,11 +170,11 @@ export interface FileRouteTypes {
     | '/session/create'
     | '/signup/done'
     | '/timeline/create'
-    | '/timeline/done'
     | '/login'
     | '/signup'
     | '/timeline'
     | '/session/$sessionId/edit'
+    | '/timeline/create/done'
     | '/session/$sessionId'
     | '/timeline/$timelineId'
     | '/timeline/$timelineId/setting/member'
@@ -186,11 +186,11 @@ export interface FileRouteTypes {
     | '/session/create'
     | '/signup/done'
     | '/timeline/create'
-    | '/timeline/done'
     | '/login/'
     | '/signup/'
     | '/timeline/'
     | '/session/$sessionId/edit'
+    | '/timeline/create/done'
     | '/session/$sessionId/'
     | '/timeline/$timelineId/'
     | '/timeline/$timelineId/setting/member'
@@ -202,8 +202,7 @@ export interface RootRouteChildren {
   LoginPasswordRoute: typeof LoginPasswordRoute
   SessionCreateRoute: typeof SessionCreateRoute
   SignupDoneRoute: typeof SignupDoneRoute
-  TimelineCreateRoute: typeof TimelineCreateRoute
-  TimelineDoneRoute: typeof TimelineDoneRoute
+  TimelineCreateRoute: typeof TimelineCreateRouteWithChildren
   LoginIndexRoute: typeof LoginIndexRoute
   SignupIndexRoute: typeof SignupIndexRoute
   TimelineIndexRoute: typeof TimelineIndexRoute
@@ -242,13 +241,6 @@ declare module '@tanstack/react-router' {
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/timeline/done': {
-      id: '/timeline/done'
-      path: '/timeline/done'
-      fullPath: '/timeline/done'
-      preLoaderRoute: typeof TimelineDoneRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/timeline/create': {
@@ -293,6 +285,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SessionSessionIdIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/timeline/create/done': {
+      id: '/timeline/create/done'
+      path: '/done'
+      fullPath: '/timeline/create/done'
+      preLoaderRoute: typeof TimelineCreateDoneRouteImport
+      parentRoute: typeof TimelineCreateRoute
+    }
     '/session/$sessionId/edit': {
       id: '/session/$sessionId/edit'
       path: '/session/$sessionId/edit'
@@ -317,13 +316,24 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface TimelineCreateRouteChildren {
+  TimelineCreateDoneRoute: typeof TimelineCreateDoneRoute
+}
+
+const TimelineCreateRouteChildren: TimelineCreateRouteChildren = {
+  TimelineCreateDoneRoute: TimelineCreateDoneRoute,
+}
+
+const TimelineCreateRouteWithChildren = TimelineCreateRoute._addFileChildren(
+  TimelineCreateRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   LoginPasswordRoute: LoginPasswordRoute,
   SessionCreateRoute: SessionCreateRoute,
   SignupDoneRoute: SignupDoneRoute,
-  TimelineCreateRoute: TimelineCreateRoute,
-  TimelineDoneRoute: TimelineDoneRoute,
+  TimelineCreateRoute: TimelineCreateRouteWithChildren,
   LoginIndexRoute: LoginIndexRoute,
   SignupIndexRoute: SignupIndexRoute,
   TimelineIndexRoute: TimelineIndexRoute,
