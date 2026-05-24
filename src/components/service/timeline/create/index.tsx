@@ -1,11 +1,33 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
+import { requestCheckTimelineName } from '../../../../api/timeline';
+import { isAxiosError } from 'axios';
 
 export const TimelineCreate = () => {
   const [isUnique, setIsUnique] = useState(false);
+  const [nameMessage, setNameMessage] = useState('');
 
-  const handleCheckName = (formData: FormData) => {
+  const handleCheckName = async (formData: FormData) => {
+    if (isUnique) {
+      return;
+    }
+
     const name = formData.get('name') as string;
-    alert(name);
+
+    try {
+      const { status } = await requestCheckTimelineName(name);
+
+      if (status === 200) {
+        setIsUnique(true);
+        setNameMessage('사용 가능한 이름입니다.');
+      }
+    } catch (error) {
+      if (isAxiosError(error)) {
+        setNameMessage(error.response?.data.message);
+      } else {
+        setNameMessage('중복 확인 중 오류가 발생했습니다.');
+        console.error(error);
+      }
+    }
   };
 
   const handleCreateAction = (formData: FormData) => {
@@ -14,8 +36,28 @@ export const TimelineCreate = () => {
     });
   };
 
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const formData = new FormData(event.currentTarget);
+
+    const submitter = (event.nativeEvent as SubmitEvent)
+      .submitter as HTMLButtonElement | null;
+
+    // 눌린 버튼이 무엇인지 확인
+    switch (submitter?.name) {
+      case 'checkname':
+        handleCheckName(formData);
+        break;
+      case 'submit':
+        handleCreateAction(formData);
+        break;
+      default:
+    }
+  };
+
   return (
-    <form action={handleCreateAction}>
+    <form onSubmit={handleSubmit}>
       <div className="pt-8 px-6 flex flex-col gap-6">
         <h1 className="text-4xl font-bold">타임라인 만들기</h1>
         <table
@@ -31,17 +73,26 @@ export const TimelineCreate = () => {
           <tbody>
             <tr>
               <td>타임라인 이름</td>
-              <td>
-                <input name="name" className="w-full" />
-              </td>
-              <td className="text-right">
-                <button
-                  type="submit"
-                  formAction={handleCheckName}
-                  className="bg-black text-white px-10 py-1 text-2xl font-bold"
-                >
-                  중복 확인
-                </button>
+              <td className="h-24 py-4">
+                <div className="flex items-start gap-4">
+                  <input
+                    name="name"
+                    className="flex-1"
+                    onChange={() => {
+                      setIsUnique(false);
+                      setNameMessage('');
+                    }}
+                  />
+                  <button
+                    type="submit"
+                    name="checkname"
+                    value="1"
+                    className="bg-black text-white px-10 py-1 text-2xl font-bold"
+                  >
+                    중복 확인
+                  </button>
+                </div>
+                <div className="text-xl">{nameMessage}</div>
               </td>
             </tr>
             <tr>
@@ -141,6 +192,7 @@ export const TimelineCreate = () => {
         <div className="flex justify-end">
           <button
             type="submit"
+            name="submit"
             className="cursor-pointer bg-black text-white px-10 py-1 text-3xl font-bold"
           >
             다 만듦
