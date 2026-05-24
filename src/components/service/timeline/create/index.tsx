@@ -93,7 +93,10 @@ export const TimelineCreate = () => {
             <tr>
               <td>타임라인 설명</td>
               <td>
-                <textarea name="description" />
+                <textarea
+                  className="border-2 align-middle"
+                  name="description"
+                />
               </td>
             </tr>
             <tr>
