@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { requestCheckTimelineName } from '../../../../api/timeline';
 import { isAxiosError } from 'axios';
+import { CategoryDropdown } from './CategoryDropdown';
 
 export const TimelineCreate = () => {
   const [isUnique, setIsUnique] = useState(false);
   const [nameMessage, setNameMessage] = useState('');
+  const [category, setCategory] = useState<string | null>(null);
 
   const handleCheckName = async (formData: FormData) => {
     if (isUnique) {
@@ -118,7 +120,11 @@ export const TimelineCreate = () => {
             <tr>
               <td>카테고리</td>
               <td>
-                <input name="category" />
+                <CategoryDropdown
+                  name="category"
+                  value={category}
+                  onChange={(newCategory) => setCategory(newCategory)}
+                />
               </td>
             </tr>
             <tr>
