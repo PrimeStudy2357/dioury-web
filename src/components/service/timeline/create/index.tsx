@@ -116,20 +116,6 @@ export const TimelineCreate = () => {
               </td>
             </tr>
             <tr>
-              <td>프로필 사진</td>
-              <td>
-                <div className="flex items-center gap-4">
-                  <input className="w-fit h-fit" type="file" />
-                  <div className="text-xl">
-                    - 사이즈 : 420px X 420px
-                    <br />
-                    - 이미지 용량 : 10MB 미만 / GIF: 2MB 미만
-                    <br />- 형식 : JPG, PNG, GIF
-                  </div>
-                </div>
-              </td>
-            </tr>
-            <tr>
               <td>카테고리</td>
               <td>
                 <input name="category" />
