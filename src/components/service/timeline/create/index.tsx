@@ -100,7 +100,7 @@ export const TimelineCreate = () => {
             <tr>
               <td>공개 여부</td>
               <td>
-                <div>
+                <div className="gap-4">
                   <label>
                     <input
                       type="radio"
@@ -145,7 +145,7 @@ export const TimelineCreate = () => {
             <tr>
               <td>주기</td>
               <td>
-                <div>
+                <div className="gap-4">
                   <label>
                     <input
                       type="radio"
@@ -169,14 +169,16 @@ export const TimelineCreate = () => {
             <tr>
               <td>온/오프라인</td>
               <td>
-                <label>
-                  <input type="radio" name="isOn" value="on" defaultChecked />
-                  <span>온라인</span>
-                </label>
-                <label>
-                  <input type="radio" name="isOn" value="off" />
-                  <span>오프라인</span>
-                </label>
+                <div className="gap-4">
+                  <label>
+                    <input type="radio" name="isOn" value="on" defaultChecked />
+                    <span>온라인</span>
+                  </label>
+                  <label>
+                    <input type="radio" name="isOn" value="off" />
+                    <span>오프라인</span>
+                  </label>
+                </div>
               </td>
             </tr>
           </tbody>
