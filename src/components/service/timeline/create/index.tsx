@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { requestCheckTimelineName } from '../../../../api/timeline';
 import { isAxiosError } from 'axios';
 import { CategoryDropdown } from './CategoryDropdown';
+import { KeywordInput } from './KeywordInput';
 
 export const TimelineCreate = () => {
   const [isUnique, setIsUnique] = useState(false);
@@ -130,7 +131,7 @@ export const TimelineCreate = () => {
             <tr>
               <td>키워드</td>
               <td>
-                <input name="keyword" />
+                <KeywordInput name="keyword" />
               </td>
             </tr>
             <tr>
