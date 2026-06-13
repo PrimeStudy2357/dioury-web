@@ -138,7 +138,7 @@ export const TimelineCreate = () => {
               <td>타임라인 설명</td>
               <td>
                 <textarea
-                  className="border-2 align-middle"
+                  className="border-2 align-middle w-128"
                   name="description"
                 />
               </td>
@@ -157,13 +157,19 @@ export const TimelineCreate = () => {
                     <span>비정기</span>
                   </label>
                   <label>
-                    <input type="radio" value="regular" name="isRegular" />
+                    <input
+                      type="radio"
+                      value="regular"
+                      name="isRegular"
+                      className="peer"
+                    />
                     <span>정기</span>
-                  </label>
-                  <div>
-                    <input name="period" />
+                    <input
+                      name="period"
+                      className="opacity-40 mx-4 pointer-events-none peer-checked:opacity-100 peer-checked:pointer-events-auto"
+                    />
                     <span>ex. 주 1회</span>
-                  </div>
+                  </label>
                 </div>
               </td>
             </tr>

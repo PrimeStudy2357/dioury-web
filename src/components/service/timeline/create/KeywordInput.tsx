@@ -62,6 +62,7 @@ export const KeywordInput = ({ name }: KeywordInputProps) => {
 
     setKeywords((prev) => [inputKeyword, ...prev]);
     setInputKeyword('');
+    setMessage('');
   };
 
   const handleDeleteKeyword = (keyword: string) => {
