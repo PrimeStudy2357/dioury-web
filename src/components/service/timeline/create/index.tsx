@@ -1,8 +1,12 @@
 import React, { useState } from 'react';
-import { requestCheckTimelineName } from '../../../../api/timeline';
+import {
+  requestCheckTimelineName,
+  requestCreateTimeline,
+} from '../../../../api/timeline';
 import { isAxiosError } from 'axios';
 import { CategoryDropdown } from './CategoryDropdown';
 import { KeywordInput } from './KeywordInput';
+import { useNavigate } from '@tanstack/react-router';
 
 export const TimelineCreate = () => {
   const [isUnique, setIsUnique] = useState(false);
@@ -33,10 +37,52 @@ export const TimelineCreate = () => {
     }
   };
 
-  const handleCreateAction = (formData: FormData) => {
+  const navigate = useNavigate();
+  const handleCreateAction = async (formData: FormData) => {
     formData.forEach((value, key) => {
       console.log(`${key}: ${value}`);
     });
+
+    const name = formData.get('name') as string;
+    if (!name || !isUnique) {
+      alert('이름을 확인해주세요.');
+      return;
+    }
+
+    const category = formData.get('category') as string;
+    if (!category) {
+      alert('카테고리를 확인해주세요.');
+      return;
+    }
+
+    const keywordString = formData.get('keyword') as string;
+    const keywords = keywordString === '' ? [] : keywordString.split(',');
+    if (keywords.length === 0) {
+      alert('최소 1개의 키워드가 필요합니다.');
+      return;
+    }
+
+    const description = formData.get('description') as string;
+    if (!description) {
+      alert('설명을 입력해주세요.');
+      return;
+    }
+
+    const isPublic = formData.get('isPublic') === 'public';
+    const isOn = formData.get('isOn') === 'on';
+    const period = formData.get('period') as string;
+
+    const { status } = await requestCreateTimeline({
+      category: category,
+      name: name,
+      description: description,
+      isPublic: isPublic,
+      isOn: isOn,
+      period: period,
+      keywords: keywords,
+    });
+
+    navigate({ to: '/timeline/create/done' });
   };
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
