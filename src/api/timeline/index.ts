@@ -8,7 +8,6 @@ export const requestCheckTimelineName = async (name: string) => {
 };
 
 export const requestCreateTimeline = async (params: CreateTimelineType) => {
-  console.log('🥕', params);
   return await APIInstance.post(`/timeline`, {
     ...params,
   });
