@@ -1,0 +1,262 @@
+import React, { useState } from 'react';
+import {
+  requestCheckTimelineName,
+  requestCreateTimeline,
+} from '../../../../api/timeline';
+import { isAxiosError } from 'axios';
+import { CategoryDropdown } from './CategoryDropdown';
+import { KeywordInput } from './KeywordInput';
+import { useNavigate } from '@tanstack/react-router';
+
+export const TimelineCreate = () => {
+  const [isUnique, setIsUnique] = useState(false);
+  const [nameMessage, setNameMessage] = useState('');
+  const [category, setCategory] = useState<string | null>(null);
+
+  const handleCheckName = async (formData: FormData) => {
+    if (isUnique) {
+      return;
+    }
+
+    const name = formData.get('name') as string;
+
+    try {
+      const { status } = await requestCheckTimelineName(name);
+
+      if (status === 200) {
+        setIsUnique(true);
+        setNameMessage('사용 가능한 이름입니다.');
+      }
+    } catch (error) {
+      if (isAxiosError(error)) {
+        setNameMessage(error.response?.data.message);
+      } else {
+        setNameMessage('중복 확인 중 오류가 발생했습니다.');
+        console.error(error);
+      }
+    }
+  };
+
+  const navigate = useNavigate();
+  const handleCreateAction = async (formData: FormData) => {
+    formData.forEach((value, key) => {
+      console.log(`${key}: ${value}`);
+    });
+
+    const name = formData.get('name') as string;
+    if (!name || !isUnique) {
+      alert('이름을 확인해주세요.');
+      return;
+    }
+
+    const category = formData.get('category') as string;
+    if (!category) {
+      alert('카테고리를 확인해주세요.');
+      return;
+    }
+
+    const keywordString = formData.get('keyword') as string;
+    const keywords = keywordString === '' ? [] : keywordString.split(',');
+    if (keywords.length === 0) {
+      alert('최소 1개의 키워드가 필요합니다.');
+      return;
+    }
+
+    const description = formData.get('description') as string;
+    if (!description) {
+      alert('설명을 입력해주세요.');
+      return;
+    }
+
+    const isPublic = formData.get('isPublic') === 'public';
+    const isOn = formData.get('isOn') === 'on';
+    const period = formData.get('period') as string;
+
+    const { status } = await requestCreateTimeline({
+      category: category,
+      name: name,
+      description: description,
+      isPublic: isPublic,
+      isOn: isOn,
+      period: period,
+      keywords: keywords,
+    });
+
+    navigate({ to: '/timeline/create/done' });
+  };
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const formData = new FormData(event.currentTarget);
+
+    const submitter = (event.nativeEvent as SubmitEvent)
+      .submitter as HTMLButtonElement | null;
+
+    // 눌린 버튼이 무엇인지 확인
+    switch (submitter?.name) {
+      case 'checkname':
+        handleCheckName(formData);
+        break;
+      case 'submit':
+        handleCreateAction(formData);
+        break;
+      default:
+    }
+  };
+
+  return (
+    <div className="flex justify-center mt-8">
+      <form
+        className="flex-1 min-w-[840px] max-w-[1440px]"
+        onSubmit={handleSubmit}
+      >
+        <div className="pt-8 px-6 flex flex-col gap-6">
+          <h1 className="text-4xl font-bold">타임라인 만들기</h1>
+          <table
+            className="table-fixed border-t-2 border-b-2
+        [&_tr]:text-2xl
+        [&_tr]:h-28
+        [&_tr]:border-b
+        [&_td:first-child]:font-semibold
+        [&_td:first-child]:w-48
+        [&_td_div]:flex
+        [&_input]:border-2
+      "
+          >
+            <tbody>
+              <tr>
+                <td>타임라인 이름</td>
+                <td className="h-24 py-4">
+                  <div className="flex items-start gap-4">
+                    <input
+                      name="name"
+                      className="flex-1"
+                      onChange={() => {
+                        setIsUnique(false);
+                        setNameMessage('');
+                      }}
+                    />
+                    <button
+                      type="submit"
+                      name="checkname"
+                      value="1"
+                      className="bg-black text-white px-10 py-1 text-2xl font-bold"
+                    >
+                      중복 확인
+                    </button>
+                  </div>
+                  <div className="text-xl">{nameMessage}</div>
+                </td>
+              </tr>
+              <tr>
+                <td>공개 여부</td>
+                <td>
+                  <div className="gap-4">
+                    <label>
+                      <input
+                        type="radio"
+                        name="isPublic"
+                        value="public"
+                        defaultChecked
+                      />
+                      <span>공개</span>
+                    </label>
+                    <label>
+                      <input type="radio" name="isPublic" value="private" />
+                      <span>비공개</span>
+                    </label>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>카테고리</td>
+                <td>
+                  <CategoryDropdown
+                    name="category"
+                    value={category}
+                    onChange={(newCategory) => setCategory(newCategory)}
+                  />
+                </td>
+              </tr>
+              <tr>
+                <td>키워드</td>
+                <td>
+                  <KeywordInput name="keyword" />
+                </td>
+              </tr>
+              <tr>
+                <td>타임라인 설명</td>
+                <td>
+                  <textarea
+                    className="border-2 align-middle w-128"
+                    name="description"
+                  />
+                </td>
+              </tr>
+              <tr>
+                <td>주기</td>
+                <td>
+                  <div className="gap-4">
+                    <label>
+                      <input
+                        type="radio"
+                        name="isRegular"
+                        value="irregular"
+                        defaultChecked
+                      />
+                      <span>비정기</span>
+                    </label>
+                    <label>
+                      <input
+                        type="radio"
+                        value="regular"
+                        name="isRegular"
+                        className="peer"
+                      />
+                      <span>정기</span>
+                      <input
+                        name="period"
+                        className="opacity-40 mx-4 pointer-events-none peer-checked:opacity-100 peer-checked:pointer-events-auto"
+                      />
+                      <span>ex. 주 1회</span>
+                    </label>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>온/오프라인</td>
+                <td>
+                  <div className="gap-4">
+                    <label>
+                      <input
+                        type="radio"
+                        name="isOn"
+                        value="on"
+                        defaultChecked
+                      />
+                      <span>온라인</span>
+                    </label>
+                    <label>
+                      <input type="radio" name="isOn" value="off" />
+                      <span>오프라인</span>
+                    </label>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div className="flex justify-end">
+            <button
+              type="submit"
+              name="submit"
+              className="cursor-pointer bg-black text-white px-10 py-1 text-3xl font-bold"
+            >
+              다 만듦
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  );
+};
