@@ -18,7 +18,7 @@ export const CategoryDropdown = ({
   return (
     <div className="relative inline-block">
       <button onClick={() => setOpen((o) => !o)}>
-        <span>{value ?? '선택하세요'}</span>
+        <span>{value ?? '선택'}</span>
         <span>▾</span>
       </button>
       {open && (

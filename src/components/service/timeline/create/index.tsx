@@ -7,6 +7,7 @@ import { isAxiosError } from 'axios';
 import { CategoryDropdown } from './CategoryDropdown';
 import { KeywordInput } from './KeywordInput';
 import { useNavigate } from '@tanstack/react-router';
+import { useConfirm } from '../../../../hooks/useConfirm';
 
 export const TimelineCreate = () => {
   const [isUnique, setIsUnique] = useState(false);
@@ -37,7 +38,9 @@ export const TimelineCreate = () => {
     }
   };
 
+  const confirm = useConfirm();
   const navigate = useNavigate();
+
   const handleCreateAction = async (formData: FormData) => {
     formData.forEach((value, key) => {
       console.log(`${key}: ${value}`);
@@ -72,7 +75,7 @@ export const TimelineCreate = () => {
     const isOn = formData.get('isOn') === 'on';
     const period = formData.get('period') as string;
 
-    const { status } = await requestCreateTimeline({
+    const { status, data } = await requestCreateTimeline({
       category: category,
       name: name,
       description: description,
@@ -82,7 +85,22 @@ export const TimelineCreate = () => {
       keywords: keywords,
     });
 
-    navigate({ to: '/timeline/create/done' });
+    if (
+      await confirm({
+        title: '타임라인이 생성되었습니다.',
+        confirmText: '목록으로',
+        cancelText: '멤버 추가하기',
+      })
+    ) {
+      navigate({ to: '/timeline' });
+    } else {
+      navigate({
+        to: '/timeline/$timelineId/setting/member',
+        params: {
+          timelineId: data.id,
+        },
+      });
+    }
   };
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {

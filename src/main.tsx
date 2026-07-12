@@ -10,6 +10,7 @@ import reportWebVitals from './reportWebVitals.ts';
 import { useAuth } from './hooks/useAuth.ts';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { AuthProvider } from './providers/authProvider.tsx';
+import { ConfirmProvider } from './providers/confirmProvider.tsx';
 
 const queryClient = new QueryClient();
 
@@ -52,9 +53,11 @@ function App() {
 function Root() {
   return (
     <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <App />
-      </AuthProvider>
+      <ConfirmProvider>
+        <AuthProvider>
+          <App />
+        </AuthProvider>
+      </ConfirmProvider>
     </QueryClientProvider>
   );
 }
