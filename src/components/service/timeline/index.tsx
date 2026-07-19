@@ -1,5 +1,6 @@
 import { useNavigate } from '@tanstack/react-router';
-import { TimelineSection } from './TimelineSection';
+import { RecommendedList } from './list/recommendedList';
+import { JoinedList } from './list/joinedList';
 
 export const Timeline = () => {
   const navigate = useNavigate();
@@ -17,8 +18,8 @@ export const Timeline = () => {
           새 타임라인
         </button>
       </div>
-      <TimelineSection title={'관심 타임라인'} />
-      <TimelineSection title={'추천 타임라인'} />
+      <JoinedList />
+      <RecommendedList />
     </>
   );
 };

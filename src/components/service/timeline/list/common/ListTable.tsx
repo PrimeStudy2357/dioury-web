@@ -1,4 +1,4 @@
-export const TimelineList = () => {
+export const ListTable = () => {
   return (
     <table>
       <tr className="text-2xl">
