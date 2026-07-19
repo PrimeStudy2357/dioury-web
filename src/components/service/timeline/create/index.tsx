@@ -71,6 +71,10 @@ export const TimelineCreate = () => {
       return;
     }
 
+    if (!(await confirm({ title: '타임라인을 생성하시겠습니까?' }))) {
+      return;
+    }
+
     const isPublic = formData.get('isPublic') === 'public';
     const isOn = formData.get('isOn') === 'on';
     const period = formData.get('period') as string;

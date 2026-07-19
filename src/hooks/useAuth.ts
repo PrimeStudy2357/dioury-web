@@ -1,6 +1,4 @@
-import { useContext, useState } from 'react';
-import { Route } from '../routes';
-import type { UserType } from '../types/user.type';
+import { useContext } from 'react';
 import { RouterAuthContext } from '../providers/authProvider';
 
 /**
