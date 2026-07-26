@@ -1,20 +1,29 @@
+import { useState } from 'react';
+import { LIST_ORDER, LIST_SORT_BY } from '../../../../../constants/order';
+import { useRecommendedTimelinesQuery } from '../../../../../hooks/query/useRecommendedTimelinesQuery';
 import { ListHeader } from '../common/ListHeader';
 import { ListTable } from '../common/ListTable';
 
 export const RecommendedList = () => {
-  // TODO: 추천 타임라인 API 호출
+  const [page, setPage] = useState(1);
+
+  const { data } = useRecommendedTimelinesQuery({
+    page,
+    sortBy: LIST_SORT_BY.LIKE_COUNT,
+    order: LIST_ORDER.DESCENDING,
+  });
 
   return (
     <section className="flex flex-col px-6 pt-12 pb-8">
       <ListHeader
         title="추천 타임라인"
         pagination={{
-          currentPage: 1,
-          totalPages: 9,
+          currentPage: page,
+          totalPages: data?.pagination.totalPages ?? 1,
         }}
-        onPageChanged={() => {}}
+        onPageChanged={setPage}
       />
-      <ListTable />
+      <ListTable timelines={data?.timelines} />
     </section>
   );
 };
