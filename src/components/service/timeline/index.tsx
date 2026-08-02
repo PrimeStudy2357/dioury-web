@@ -18,7 +18,8 @@ export const Timeline = () => {
           새 타임라인
         </button>
       </div>
-      <JoinedList />
+      {/* TODO: 관심 타임라인 구현 */}
+      {/* <JoinedList /> */}
       <RecommendedList />
     </>
   );
