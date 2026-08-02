@@ -3,7 +3,12 @@ import FirstPageIcon from '@mui/icons-material/FirstPage';
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import LastPageIcon from '@mui/icons-material/LastPage';
-import { LIST_ORDER, LIST_SORT_BY } from '../../../../../constants/order';
+import {
+  LIST_ORDER,
+  LIST_SORT_BY,
+  type ListSortBy,
+} from '../../../../../constants/order';
+import { SortByDropdown } from './SortByDropdown';
 
 interface ListHeaderProps {
   title: string;
@@ -28,7 +33,7 @@ export const ListHeader = ({
   const { currentPage, totalPages } = pagination;
 
   const [page, setPage] = useState(currentPage);
-  const [sortBy, setSortBy] = useState(LIST_SORT_BY.LIKE_COUNT);
+  const [sortBy, setSortBy] = useState<ListSortBy>(LIST_SORT_BY.LIKE_COUNT);
   const [order, setOrder] = useState(LIST_ORDER.DESCENDING);
 
   const minPage = Math.floor((page - 1) / PAGES_UNIT) * PAGES_UNIT + 1;
@@ -50,8 +55,7 @@ export const ListHeader = ({
       <span>{title}</span>
       <div className="flex gap-10">
         {/* TBD: Filter Component */}
-        <span>추천순</span>
-        {/* TBD: Pagination Component */}
+        <SortByDropdown value={sortBy} onChange={setSortBy} />
         <span className="flex items-center gap-2">
           <span className="flex gap-0.5">
             <button
