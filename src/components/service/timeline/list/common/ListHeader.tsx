@@ -1,4 +1,8 @@
 import { useState } from 'react';
+import FirstPageIcon from '@mui/icons-material/FirstPage';
+import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
+import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
+import LastPageIcon from '@mui/icons-material/LastPage';
 import { LIST_ORDER, LIST_SORT_BY } from '../../../../../constants/order';
 
 interface ListHeaderProps {
@@ -48,40 +52,54 @@ export const ListHeader = ({
         {/* TBD: Filter Component */}
         <span>추천순</span>
         {/* TBD: Pagination Component */}
-        <span className="flex gap-2">
-          <button className="cursor-pointer" onClick={() => handleClickPage(1)}>
-            {'<<'}
-          </button>
-
-          <button
-            className="cursor-pointer"
-            onClick={() => handleClickPage(page - 1)}
-          >
-            {'<'}
-          </button>
-          {[0, 1, 2, 3, 4].map((index) => {
-            const pageValue = index + minPage;
-            return (
-              <button
-                className={`cursor-pointer ${page === pageValue ? 'text-emerald-700' : ''}`}
-                onClick={() => handleClickPage(pageValue)}
-              >
-                {pageValue}
-              </button>
-            );
-          })}
-          <button
-            className="cursor-pointer"
-            onClick={() => handleClickPage(page + 1)}
-          >
-            {'>'}
-          </button>
-          <button
-            className="cursor-pointer"
-            onClick={() => handleClickPage(totalPages)}
-          >
-            {'>>'}
-          </button>
+        <span className="flex items-center gap-2">
+          <span className="flex gap-0.5">
+            <button
+              className="cursor-pointer h-8 w-6 flex items-center justify-center"
+              onClick={() => handleClickPage(1)}
+            >
+              <FirstPageIcon fontSize="medium" className="relative top-0.5" />
+            </button>
+            <button
+              className="cursor-pointer h-8 w-6 flex items-center justify-center"
+              onClick={() => handleClickPage(page - 1)}
+            >
+              <KeyboardArrowLeftIcon
+                fontSize="medium"
+                className="relative top-0.5"
+              />
+            </button>
+          </span>
+          <span className="flex gap-2">
+            {[0, 1, 2, 3, 4].map((index) => {
+              const pageValue = index + minPage;
+              return (
+                <button
+                  className={`cursor-pointer h-8 w-6 flex items-center justify-center ${page === pageValue ? 'text-emerald-700' : ''}`}
+                  onClick={() => handleClickPage(pageValue)}
+                >
+                  {pageValue}
+                </button>
+              );
+            })}
+          </span>
+          <span className="flex gap-0.5">
+            <button
+              className="cursor-pointer h-8 w-6 flex items-center justify-center"
+              onClick={() => handleClickPage(page + 1)}
+            >
+              <KeyboardArrowRightIcon
+                fontSize="medium"
+                className="relative top-0.5"
+              />
+            </button>
+            <button
+              className="cursor-pointer h-8 w-6 flex items-center justify-center"
+              onClick={() => handleClickPage(totalPages)}
+            >
+              <LastPageIcon fontSize="medium" className="relative top-0.5" />
+            </button>
+          </span>
         </span>
       </div>
     </div>
