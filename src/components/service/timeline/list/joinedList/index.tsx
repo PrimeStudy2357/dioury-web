@@ -13,6 +13,7 @@ export const JoinedList = () => {
           totalPages: 5,
         }}
         onPageChanged={() => {}}
+        onSortChanged={() => {}}
       />
       <ListTable />
     </section>

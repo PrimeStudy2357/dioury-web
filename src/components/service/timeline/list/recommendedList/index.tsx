@@ -1,16 +1,26 @@
 import { useState } from 'react';
-import { LIST_ORDER, LIST_SORT_BY } from '../../../../../constants/order';
+import {
+  LIST_ORDER,
+  LIST_SORT_BY,
+  LIST_SORT_OPTION,
+  type ListOrder,
+  type ListSortBy,
+} from '../../../../../constants/order';
 import { useRecommendedTimelinesQuery } from '../../../../../hooks/query/useRecommendedTimelinesQuery';
 import { ListHeader } from '../common/ListHeader';
 import { ListTable } from '../common/ListTable';
 
 export const RecommendedList = () => {
   const [page, setPage] = useState(1);
+  const [sort, setSort] = useState<{ sortBy: ListSortBy; order: ListOrder }>({
+    sortBy: LIST_SORT_BY.LIKE_COUNT,
+    order: LIST_ORDER.DESCENDING,
+  });
 
   const { data } = useRecommendedTimelinesQuery({
     page,
-    sortBy: LIST_SORT_BY.LIKE_COUNT,
-    order: LIST_ORDER.DESCENDING,
+    sortBy: sort.sortBy,
+    order: sort.order,
   });
 
   return (
@@ -22,6 +32,8 @@ export const RecommendedList = () => {
           totalPages: data?.pagination.totalPages ?? 1,
         }}
         onPageChanged={setPage}
+        onSortChanged={setSort}
+        initialSortOption={LIST_SORT_OPTION.RECOMMENDED}
       />
       <ListTable timelines={data?.timelines} />
     </section>

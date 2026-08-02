@@ -4,9 +4,11 @@ import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import LastPageIcon from '@mui/icons-material/LastPage';
 import {
-  LIST_ORDER,
-  LIST_SORT_BY,
+  LIST_SORT_OPTION,
+  LIST_SORT_OPTION_PARAMS,
+  type ListOrder,
   type ListSortBy,
+  type ListSortOption,
 } from '../../../../../constants/order';
 import { SortByDropdown } from './SortByDropdown';
 
@@ -17,6 +19,8 @@ interface ListHeaderProps {
     currentPage: number;
   };
   onPageChanged: (newPage: number) => void;
+  onSortChanged: (params: { sortBy: ListSortBy; order: ListOrder }) => void;
+  initialSortOption?: ListSortOption;
 }
 
 const PAGES_UNIT = 5;
@@ -29,12 +33,14 @@ export const ListHeader = ({
   title,
   pagination,
   onPageChanged,
+  onSortChanged,
+  initialSortOption = LIST_SORT_OPTION.LATEST,
 }: ListHeaderProps) => {
   const { currentPage, totalPages } = pagination;
 
   const [page, setPage] = useState(currentPage);
-  const [sortBy, setSortBy] = useState<ListSortBy>(LIST_SORT_BY.LIKE_COUNT);
-  const [order, setOrder] = useState(LIST_ORDER.DESCENDING);
+  const [sortOption, setSortOption] =
+    useState<ListSortOption>(initialSortOption);
 
   const minPage = Math.floor((page - 1) / PAGES_UNIT) * PAGES_UNIT + 1;
 
@@ -50,12 +56,18 @@ export const ListHeader = ({
     onPageChanged(newPage);
   };
 
+  const handleSortOptionChanged = (newSortOption: ListSortOption) => {
+    setSortOption(newSortOption);
+    setPage(1);
+    onPageChanged(1);
+    onSortChanged(LIST_SORT_OPTION_PARAMS[newSortOption]);
+  };
+
   return (
     <div className="flex justify-between text-2xl font-bold pb-9">
       <span>{title}</span>
       <div className="flex gap-10">
-        {/* TBD: Filter Component */}
-        <SortByDropdown value={sortBy} onChange={setSortBy} />
+        <SortByDropdown value={sortOption} onChange={handleSortOptionChanged} />
         <span className="flex items-center gap-2">
           <span className="flex gap-0.5">
             <button
