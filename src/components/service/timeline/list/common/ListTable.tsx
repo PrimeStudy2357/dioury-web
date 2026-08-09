@@ -1,3 +1,4 @@
+import { Link } from '@tanstack/react-router';
 import type { TimelineType } from '../../../../../types/timeline.type';
 
 interface ListTableProps {
@@ -23,7 +24,15 @@ export const ListTable = ({ timelines = [] }: ListTableProps) => {
           <tr key={timeline.id}>
             <td className="py-3"></td>
             <td className="py-3">{timeline.isOn ? 'On' : 'Off'}</td>
-            <td className="py-3">{timeline.name}</td>
+            <td className="py-3">
+              <Link
+                to={'/timeline/$timelineId'}
+                params={{ timelineId: String(timeline.id) }}
+                className="font-bold underline"
+              >
+                {timeline.name}
+              </Link>
+            </td>
             <td className="py-3">{timeline.keywords.join(', ')}</td>
             <td className="py-3">{timeline.memberCnt}</td>
             <td className="py-3">{timeline.creatorName}</td>
