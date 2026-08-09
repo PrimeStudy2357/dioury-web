@@ -1,6 +1,5 @@
 import { useNavigate } from '@tanstack/react-router';
 import { RecommendedList } from './list/recommendedList';
-import { JoinedList } from './list/joinedList';
 
 export const Timeline = () => {
   const navigate = useNavigate();

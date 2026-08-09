@@ -18,6 +18,11 @@ type GetRecommendedTimelinesRawResponse = {
   pagination: TimelinePaginationType;
 };
 
+type GetTimelineRawResponse = {
+  success: boolean;
+  data: TimelineApiEntity;
+};
+
 const toTimelineType = ({
   keyword1,
   keyword2,
@@ -40,6 +45,14 @@ export const requestCreateTimeline = async (params: CreateTimelineType) => {
   return await APIInstance.post(`/timeline`, {
     ...params,
   });
+};
+
+export const requestGetTimeline = async (id: number) => {
+  const { data } = await APIInstance.get<GetTimelineRawResponse>(
+    `/timeline/${id}`,
+  );
+
+  return toTimelineType(data.data);
 };
 
 export const requestGetRecommendedTimelines = async (
