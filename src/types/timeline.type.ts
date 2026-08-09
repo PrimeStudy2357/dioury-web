@@ -1,22 +1,39 @@
+import { LIST_ORDER, type ListSortBy } from '../constants/order';
+
+type ListOrder = (typeof LIST_ORDER)[keyof typeof LIST_ORDER];
+
 export type TimelineType = {
-  // TODO: 나머지 정보도 체워넣기
+  id: number;
   name: string;
-  description: string;
-  isOn: boolean;
   isPublic: boolean;
-  keywords: string[];
-  period: string;
+  profileImage: string | null;
   category: string;
+  keywords: string[];
+  description: string;
+  period: string;
+  isOn: boolean;
+  memberCnt: number;
+  likeCnt: number;
+  creatorName: string;
   createdAt: string;
 };
 
 export type CreateTimelineType = Pick<
   TimelineType,
-  | 'category'
-  | 'description'
-  | 'isOn'
-  | 'isPublic'
-  | 'keywords'
-  | 'name'
-  | 'period'
+  'category' | 'description' | 'isOn' | 'isPublic' | 'keywords' | 'name' | 'period'
 >;
+
+export type TimelinePaginationType = {
+  page: number;
+  perPage: number;
+  totalCount: number;
+  totalPages: number;
+  hasNextPage: boolean;
+};
+
+export type GetTimelineListParams = {
+  page?: number;
+  perPage?: number;
+  sortBy?: ListSortBy;
+  order?: ListOrder;
+};
