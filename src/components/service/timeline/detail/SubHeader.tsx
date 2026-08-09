@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import type { TimelineType } from '../../../../types/timeline.type';
 
 interface SubHeaderProps {
@@ -6,21 +5,11 @@ interface SubHeaderProps {
 }
 
 export const SubHeader = ({ timeline }: SubHeaderProps) => {
-  const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
-
   return (
     <section className="flex flex-col gap-3 px-6 pt-8 pb-6 border-b-2">
       <h1 className="text-3xl font-bold">{timeline.name}</h1>
       <div className="flex flex-col gap-1">
-        <p className={isDescriptionExpanded ? '' : 'line-clamp-2'}>
-          {timeline.description}
-        </p>
-        <button
-          className="cursor-pointer self-start text-sm text-neutral-500 underline"
-          onClick={() => setIsDescriptionExpanded((prev) => !prev)}
-        >
-          {isDescriptionExpanded ? '접기' : '더보기'}
-        </button>
+        <p>{timeline.description}</p>
       </div>
       <div className="flex gap-2">
         {timeline.keywords.map((keyword) => (
