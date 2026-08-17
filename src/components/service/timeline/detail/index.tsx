@@ -1,4 +1,5 @@
 import { useTimelineQuery } from '../../../../hooks/query/useTimelineQuery';
+import { SessionList } from './sessionList';
 import { SubHeader } from './SubHeader';
 
 interface TimelineDetailProps {
@@ -12,5 +13,10 @@ export const TimelineDetail = ({ timelineId }: TimelineDetailProps) => {
     return null;
   }
 
-  return <SubHeader timeline={timeline} />;
+  return (
+    <>
+      <SubHeader timeline={timeline} />
+      <SessionList sessions={[]} />
+    </>
+  );
 };
