@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
+import { Editor } from '../../../common/Editor';
 import { ParticipantInput } from './ParticipantInput';
 
 export const SessionCreate = () => {
   const [isPublic, setIsPublic] = useState(true);
+  const [content, setContent] = useState('');
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -60,11 +62,7 @@ export const SessionCreate = () => {
             </button>
           </div>
           <ParticipantInput name="participants" />
-          <textarea
-            name="content"
-            placeholder="내용을 입력하세요"
-            className="border-2 w-full h-96 p-4 text-xl"
-          />
+          <Editor value={content} onChange={setContent} name="content" />
           <div className="flex justify-end">
             <button
               type="submit"
