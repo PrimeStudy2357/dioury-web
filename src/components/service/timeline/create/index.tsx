@@ -79,7 +79,7 @@ export const TimelineCreate = () => {
     const isOn = formData.get('isOn') === 'on';
     const period = formData.get('period') as string;
 
-    const { status, data } = await requestCreateTimeline({
+    const { data } = await requestCreateTimeline({
       category: category,
       name: name,
       description: description,
