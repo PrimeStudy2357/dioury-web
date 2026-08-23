@@ -19,8 +19,8 @@ const SERVICE_ROUTE = {
     },
   },
   SESSION: {
-    CREATE: '/session/create',
-    HOME: '/session/$sessionId',
-    EDIT: '/session/$sessionId/edit',
+    CREATE: '/timeline/$timelineId/session/create',
+    HOME: '/timeline/$timelineId/session/$sessionId',
+    EDIT: '/timeline/$timelineId/session/$sessionId/edit',
   },
 };

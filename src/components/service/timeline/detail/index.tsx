@@ -16,7 +16,7 @@ export const TimelineDetail = ({ timelineId }: TimelineDetailProps) => {
   return (
     <>
       <SubHeader timeline={timeline} />
-      <SessionList sessions={[]} />
+      <SessionList timelineId={timelineId} sessions={[]} />
     </>
   );
 };

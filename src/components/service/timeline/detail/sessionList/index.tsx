@@ -1,7 +1,13 @@
+import { Link } from '@tanstack/react-router';
 import { Dropdown } from '../../../../common/Dropdown';
 import { Pagination } from '../../../../common/Pagination';
 
-export const SessionList = ({ sessions }: any) => {
+interface SessionListProps {
+  timelineId: number;
+  sessions: any;
+}
+
+export const SessionList = ({ timelineId, sessions }: SessionListProps) => {
   return (
     <section className="flex flex-col px-6 pt-12 pb-8">
       <div className="flex justify-between text-2xl font-bold pb-9">
@@ -12,12 +18,13 @@ export const SessionList = ({ sessions }: any) => {
             options={[{ value: 'RECENT', label: '최신순' }]}
             onChange={() => {}}
           />
-          <button
-            onClick={() => {}}
+          <Link
+            to="/timeline/$timelineId/session/create"
+            params={{ timelineId: String(timelineId) }}
             className="cursor-pointer text-2xl font-bold text-white bg-black px-12 py-1"
           >
             새 세션
-          </button>
+          </Link>
         </div>
       </div>
       <div>
