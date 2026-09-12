@@ -10,6 +10,7 @@ const ParticipantItem = ({ participant, onDelete }: ParticipantItemProps) => {
     <div className="relative cursor-default border-2 h-fit px-2 rounded-xl">
       <span>{participant}</span>
       <button
+        type="button"
         onClick={() => onDelete(participant)}
         className="absolute cursor-pointer bg-black text-white -right-3 -top-2 flex justify-center items-center w-5 h-5 border-2 rounded-full text-xl leading-none pb-1"
       >
@@ -69,7 +70,11 @@ export const ParticipantInput = ({ name }: ParticipantInputProps) => {
               }
             }}
           />
-          <button className="font-bold" onClick={handleAddParticipant}>
+          <button
+            type="button"
+            className="font-bold"
+            onClick={handleAddParticipant}
+          >
             +
           </button>
         </div>

@@ -13,6 +13,18 @@ export const LIST_ORDER = {
 
 export type ListOrder = (typeof LIST_ORDER)[keyof typeof LIST_ORDER];
 
+export const SESSION_LIST_SORT_BY = {
+  CREATED_AT: 'createdAt',
+  DATE: 'date',
+  VIEW_COUNT: 'viewCnt',
+  REACTION_COUNT: 'reactionCnt',
+  COMMENT_COUNT: 'commentCnt',
+  PARTICIPANT_COUNT: 'participantCnt',
+} as const;
+
+export type SessionListSortBy =
+  (typeof SESSION_LIST_SORT_BY)[keyof typeof SESSION_LIST_SORT_BY];
+
 // UI에 노출되는 정렬 옵션. API의 sortBy/order 조합을 하나의 선택지로 감싼다.
 export const LIST_SORT_OPTION = {
   LATEST: 'latest',

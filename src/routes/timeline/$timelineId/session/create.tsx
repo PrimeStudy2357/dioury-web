@@ -7,9 +7,11 @@ export const Route = createFileRoute('/timeline/$timelineId/session/create')({
 });
 
 function RouteComponent() {
+  const { timelineId } = Route.useParams();
+
   return (
     <ServiceTemplate>
-      <SessionCreate />
+      <SessionCreate timelineId={Number(timelineId)} />
     </ServiceTemplate>
   );
 }

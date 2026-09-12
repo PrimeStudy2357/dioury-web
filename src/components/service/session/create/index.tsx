@@ -1,13 +1,95 @@
 import React, { useState } from 'react';
+import { isAxiosError } from 'axios';
+import { useNavigate } from '@tanstack/react-router';
 import { Editor } from '../../../common/Editor';
 import { ParticipantInput } from './ParticipantInput';
+import { requestCreateSession } from '../../../../api/session';
+import { useConfirm } from '../../../../hooks/useConfirm';
 
-export const SessionCreate = () => {
+interface SessionCreateProps {
+  timelineId: number;
+}
+
+export const SessionCreate = ({ timelineId }: SessionCreateProps) => {
   const [isPublic, setIsPublic] = useState(true);
   const [content, setContent] = useState('');
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const confirm = useConfirm();
+  const navigate = useNavigate();
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
+    const formData = new FormData(event.currentTarget);
+
+    const title = formData.get('title') as string;
+    if (!title) {
+      alert('제목을 입력해주세요.');
+      return;
+    }
+
+    const place = formData.get('location') as string;
+    if (!place) {
+      alert('모임 장소를 입력해주세요.');
+      return;
+    }
+
+    const date = formData.get('date') as string;
+    const time = formData.get('time') as string;
+    if (!date || !time) {
+      alert('날짜와 시간을 입력해주세요.');
+      return;
+    }
+
+    if (!content) {
+      alert('내용을 입력해주세요.');
+      return;
+    }
+
+    if (!(await confirm({ title: '세션을 생성하시겠습니까?' }))) {
+      return;
+    }
+
+    try {
+      const { data } = await requestCreateSession({
+        timelineId,
+        title,
+        place,
+        date: `${date}T${time}`,
+        content,
+        isPublic,
+      });
+
+      if (
+        await confirm({
+          title: '세션이 생성되었습니다.',
+          confirmText: '세션 보기',
+          cancelText: '목록으로',
+        })
+      ) {
+        navigate({
+          to: '/timeline/$timelineId/session/$sessionId',
+          params: {
+            timelineId: String(timelineId),
+            sessionId: String(data.data.id),
+          },
+        });
+      } else {
+        navigate({
+          to: '/timeline/$timelineId',
+          params: { timelineId: String(timelineId) },
+        });
+      }
+    } catch (error) {
+      if (isAxiosError(error)) {
+        alert(
+          error.response?.data.message ?? '세션 생성 중 오류가 발생했습니다.',
+        );
+      } else {
+        alert('세션 생성 중 오류가 발생했습니다.');
+        console.error(error);
+      }
+    }
   };
 
   return (

@@ -1,13 +1,20 @@
+import { useState } from 'react';
 import { Link } from '@tanstack/react-router';
 import { Dropdown } from '../../../../common/Dropdown';
 import { Pagination } from '../../../../common/Pagination';
+import { useSessionListQuery } from '../../../../../hooks/query/useSessionListQuery';
 
 interface SessionListProps {
   timelineId: number;
-  sessions: any;
 }
 
-export const SessionList = ({ timelineId, sessions }: SessionListProps) => {
+export const SessionList = ({ timelineId }: SessionListProps) => {
+  const [page, setPage] = useState(1);
+
+  const { data } = useSessionListQuery({ timelineId, page });
+
+  const sessions = data?.sessions ?? [];
+
   return (
     <section className="flex flex-col px-6 pt-12 pb-8">
       <div className="flex justify-between text-2xl font-bold pb-9">
@@ -41,22 +48,39 @@ export const SessionList = ({ timelineId, sessions }: SessionListProps) => {
             </tr>
           </thead>
           <tbody className="text-xl">
-            {sessions.map((session: any) => (
+            {sessions.map((session) => (
               <tr key={session.id}>
-                <td className="py-3"></td>
-                <td className="py-3"></td>
-                <td className="py-3"></td>
-                <td className="py-3"></td>
-                <td className="py-3"></td>
-                <td className="py-3"></td>
-                <td className="py-3"></td>
+                <td className="py-3">
+                  {new Date(session.createdAt).toLocaleDateString()}
+                </td>
+                <td className="py-3">
+                  <Link
+                    to="/timeline/$timelineId/session/$sessionId"
+                    params={{
+                      timelineId: String(timelineId),
+                      sessionId: String(session.id),
+                    }}
+                    className="font-bold underline"
+                  >
+                    {session.title}
+                  </Link>
+                </td>
+                <td className="py-3">{session.writerNickname}</td>
+                <td className="py-3">{session.place}</td>
+                <td className="py-3">{session.participantCnt}</td>
+                <td className="py-3">{session.viewCnt}</td>
+                <td className="py-3">{session.reactionCnt}</td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
       <div className="flex justify-end">
-        <Pagination currentPage={1} totalPages={10} onPageChange={() => {}} />
+        <Pagination
+          currentPage={page}
+          totalPages={data?.pagination.totalPages ?? 1}
+          onPageChange={setPage}
+        />
       </div>
     </section>
   );
