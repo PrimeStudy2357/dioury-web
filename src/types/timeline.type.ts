@@ -37,3 +37,26 @@ export type GetTimelineListParams = {
   sortBy?: ListSortBy;
   order?: ListOrder;
 };
+
+export type TimelineRole = 'OWNER' | 'ADMIN' | 'FRIEND' | 'MEMBER';
+
+export type TimelineMemberType = {
+  userId: number;
+  nickname: string;
+  email: string;
+  role: TimelineRole;
+};
+
+export type TimelineMemberPaginationType = {
+  page: number;
+  perPage: number;
+  totalCount: number;
+  totalPages: number;
+  hasNextPage: boolean;
+};
+
+export type GetTimelineMembersParams = {
+  query?: string;
+  page?: number;
+  perPage?: number;
+};

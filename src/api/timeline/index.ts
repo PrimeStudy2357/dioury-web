@@ -2,6 +2,9 @@ import APIInstance from '..';
 import type {
   CreateTimelineType,
   GetTimelineListParams,
+  GetTimelineMembersParams,
+  TimelineMemberPaginationType,
+  TimelineMemberType,
   TimelinePaginationType,
   TimelineType,
 } from '../../types/timeline.type';
@@ -65,6 +68,27 @@ export const requestGetRecommendedTimelines = async (
 
   return {
     timelines: data.data.map(toTimelineType),
+    pagination: data.pagination,
+  };
+};
+
+type GetTimelineMembersRawResponse = {
+  success: boolean;
+  data: TimelineMemberType[];
+  pagination: TimelineMemberPaginationType;
+};
+
+export const requestGetTimelineMembers = async (
+  timelineId: number,
+  params: GetTimelineMembersParams,
+) => {
+  const { data } = await APIInstance.get<GetTimelineMembersRawResponse>(
+    `/timeline/${timelineId}/members`,
+    { params },
+  );
+
+  return {
+    members: data.data,
     pagination: data.pagination,
   };
 };

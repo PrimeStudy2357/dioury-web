@@ -1,14 +1,16 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
+import type { TimelineMemberType } from '../../../../types/timeline.type';
+import { ParticipantSearchModal } from './ParticipantSearchModal';
 
 interface ParticipantItemProps {
-  participant: string;
-  onDelete: (participant: string) => void;
+  participant: TimelineMemberType;
+  onDelete: (participant: TimelineMemberType) => void;
 }
 
 const ParticipantItem = ({ participant, onDelete }: ParticipantItemProps) => {
   return (
     <div className="relative cursor-default border-2 h-fit px-2 rounded-xl">
-      <span>{participant}</span>
+      <span>{participant.nickname}</span>
       <button
         type="button"
         onClick={() => onDelete(participant)}
@@ -21,75 +23,53 @@ const ParticipantItem = ({ participant, onDelete }: ParticipantItemProps) => {
 };
 
 interface ParticipantInputProps {
-  name: string | null;
+  timelineId: number;
+  value: TimelineMemberType[];
+  onChange: (participants: TimelineMemberType[]) => void;
 }
 
-export const ParticipantInput = ({ name }: ParticipantInputProps) => {
-  const [inputParticipant, setInputParticipant] = useState('');
-  const [participants, setParticipants] = useState<string[]>([]);
-  const [message, setMessage] = useState('');
+export const ParticipantInput = ({
+  timelineId,
+  value,
+  onChange,
+}: ParticipantInputProps) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const handleParticipantInput = (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    setInputParticipant(event.currentTarget.value);
-  };
-
-  const handleAddParticipant = () => {
-    if (!inputParticipant) {
-      setMessage('참가자를 입력해주세요.');
-      return;
-    }
-
-    if (participants.find((participant) => participant === inputParticipant)) {
-      setMessage('이미 추가한 참가자입니다.');
-      return;
-    }
-
-    setParticipants((prev) => [inputParticipant, ...prev]);
-    setInputParticipant('');
-    setMessage('');
-  };
-
-  const handleDeleteParticipant = (participant: string) => {
-    setParticipants((prev) => prev.filter((v) => v !== participant));
+  const handleDeleteParticipant = (participant: TimelineMemberType) => {
+    onChange(value.filter((p) => p.userId !== participant.userId));
   };
 
   return (
-    <div>
-      <div className="flex flex-col">
-        <div className="flex gap-2">
-          <input
-            placeholder="참가자를 입력하세요"
-            value={inputParticipant}
-            onChange={handleParticipantInput}
-            onKeyDown={(event) => {
-              if (event.key === 'Enter') {
-                event.preventDefault();
-                handleAddParticipant();
-              }
-            }}
-          />
-          <button
-            type="button"
-            className="font-bold"
-            onClick={handleAddParticipant}
-          >
-            +
-          </button>
-        </div>
-        <span className="text-base">{message}</span>
+    <div className="flex flex-col gap-3">
+      <div>
+        <button
+          type="button"
+          onClick={() => setIsModalOpen(true)}
+          className="cursor-pointer border-2 px-4 py-2 font-bold"
+        >
+          참가자 추가
+        </button>
       </div>
       <div className="flex-1 flex gap-4 flex-wrap">
-        {participants.map((participant, index) => (
+        {value.map((participant) => (
           <ParticipantItem
-            key={`participant-${index}`}
+            key={participant.userId}
             participant={participant}
             onDelete={handleDeleteParticipant}
           />
         ))}
       </div>
-      {name && <input type="hidden" name={name} value={participants} />}
+      {isModalOpen && (
+        <ParticipantSearchModal
+          timelineId={timelineId}
+          selected={value}
+          onConfirm={(participants) => {
+            onChange(participants);
+            setIsModalOpen(false);
+          }}
+          onClose={() => setIsModalOpen(false)}
+        />
+      )}
     </div>
   );
 };

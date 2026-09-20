@@ -5,6 +5,7 @@ import { Editor } from '../../../common/Editor';
 import { ParticipantInput } from './ParticipantInput';
 import { requestCreateSession } from '../../../../api/session';
 import { useConfirm } from '../../../../hooks/useConfirm';
+import type { TimelineMemberType } from '../../../../types/timeline.type';
 
 interface SessionCreateProps {
   timelineId: number;
@@ -13,6 +14,7 @@ interface SessionCreateProps {
 export const SessionCreate = ({ timelineId }: SessionCreateProps) => {
   const [isPublic, setIsPublic] = useState(true);
   const [content, setContent] = useState('');
+  const [participants, setParticipants] = useState<TimelineMemberType[]>([]);
 
   const confirm = useConfirm();
   const navigate = useNavigate();
@@ -58,6 +60,7 @@ export const SessionCreate = ({ timelineId }: SessionCreateProps) => {
         date: `${date}T${time}`,
         content,
         isPublic,
+        participantIds: participants.map((participant) => participant.userId),
       });
 
       if (
@@ -143,7 +146,11 @@ export const SessionCreate = ({ timelineId }: SessionCreateProps) => {
               </span>
             </button>
           </div>
-          <ParticipantInput name="participants" />
+          <ParticipantInput
+            timelineId={timelineId}
+            value={participants}
+            onChange={setParticipants}
+          />
           <Editor value={content} onChange={setContent} name="content" />
           <div className="flex justify-end">
             <button
