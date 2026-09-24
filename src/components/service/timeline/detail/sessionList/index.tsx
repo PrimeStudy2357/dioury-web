@@ -75,6 +75,11 @@ export const SessionList = ({ timelineId }: SessionListProps) => {
           </tbody>
         </table>
       </div>
+      {sessions.length === 0 && (
+        <div className="flex text-md items-center justify-center w-full py-12">
+          등록된 세션이 없습니다.
+        </div>
+      )}
       <div className="flex justify-end">
         <Pagination
           currentPage={page}
