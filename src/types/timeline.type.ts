@@ -40,6 +40,11 @@ export type GetTimelineListParams = {
 
 export type TimelineRole = 'OWNER' | 'ADMIN' | 'FRIEND' | 'MEMBER';
 
+/** 타임라인 상세 조회 응답. myRole은 요청자의 역할(멤버가 아니면 null) */
+export type TimelineDetailType = TimelineType & {
+  myRole: TimelineRole | null;
+};
+
 export type TimelineMemberType = {
   userId: number;
   nickname: string;

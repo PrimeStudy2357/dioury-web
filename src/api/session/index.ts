@@ -11,6 +11,11 @@ type CreateSessionRawResponse = {
   data: SessionType;
 };
 
+type GetSessionRawResponse = {
+  success: boolean;
+  data: SessionType;
+};
+
 type GetSessionListRawResponse = {
   success: boolean;
   data: SessionType[];
@@ -33,4 +38,12 @@ export const requestGetSessionList = async (params: GetSessionListParams) => {
     sessions: data.data,
     pagination: data.pagination,
   };
+};
+
+export const requestGetSession = async (id: number) => {
+  const { data } = await APIInstance.get<GetSessionRawResponse>(
+    `/session/${id}`,
+  );
+
+  return data.data;
 };

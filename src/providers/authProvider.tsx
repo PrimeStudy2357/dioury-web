@@ -2,12 +2,13 @@ import { createContext, type ReactNode } from 'react';
 import type { UserType } from '../types/user.type';
 import { useWhoAmIQuery } from '../hooks/query/useWhoAmIQuery';
 import { useQueryClient } from '@tanstack/react-query';
+import { requestSignOut } from '../api/signin';
 
 export interface RouterAuthContextType {
   isAuthenticated: boolean;
   user: UserType | null;
   login: (user: UserType) => void;
-  logout: () => void;
+  logout: () => Promise<void>;
 }
 
 export const RouterAuthContext = createContext<RouterAuthContextType | null>(
@@ -23,8 +24,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const login = () => {
     queryClient.invalidateQueries({ queryKey: ['whoAmI'] });
   };
-  const logout = () => {
-    queryClient.setQueryData(['whoAmI'], null);
+  const logout = async () => {
+    await requestSignOut();
+    // 이전 사용자의 캐시(타임라인 등급 등)를 명시적으로 비운다
+    queryClient.clear();
   };
 
   if (isLoading) return null;

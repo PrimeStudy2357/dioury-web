@@ -1,3 +1,4 @@
+import { TIMELINE_WRITER_ROLES } from '../../../../constants/role';
 import { useTimelineQuery } from '../../../../hooks/query/useTimelineQuery';
 import { SessionList } from './sessionList';
 import { SubHeader } from './SubHeader';
@@ -16,7 +17,12 @@ export const TimelineDetail = ({ timelineId }: TimelineDetailProps) => {
   return (
     <>
       <SubHeader timeline={timeline} />
-      <SessionList timelineId={timelineId} />
+      <SessionList
+        timelineId={timelineId}
+        canWrite={
+          !!timeline.myRole && TIMELINE_WRITER_ROLES.includes(timeline.myRole)
+        }
+      />
     </>
   );
 };

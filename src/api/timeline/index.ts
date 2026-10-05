@@ -4,6 +4,7 @@ import type {
   GetTimelineListParams,
   GetTimelineMembersParams,
   TimelineMemberPaginationType,
+  TimelineDetailType,
   TimelineMemberType,
   TimelinePaginationType,
   TimelineType,
@@ -23,7 +24,7 @@ type GetRecommendedTimelinesRawResponse = {
 
 type GetTimelineRawResponse = {
   success: boolean;
-  data: TimelineApiEntity;
+  data: TimelineApiEntity & Pick<TimelineDetailType, 'myRole'>;
 };
 
 const toTimelineType = ({
@@ -55,7 +56,10 @@ export const requestGetTimeline = async (id: number) => {
     `/timeline/${id}`,
   );
 
-  return toTimelineType(data.data);
+  return {
+    ...toTimelineType(data.data),
+    myRole: data.data.myRole,
+  } as TimelineDetailType;
 };
 
 export const requestGetRecommendedTimelines = async (

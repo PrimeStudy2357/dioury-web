@@ -6,9 +6,10 @@ import { useSessionListQuery } from '../../../../../hooks/query/useSessionListQu
 
 interface SessionListProps {
   timelineId: number;
+  canWrite: boolean;
 }
 
-export const SessionList = ({ timelineId }: SessionListProps) => {
+export const SessionList = ({ timelineId, canWrite }: SessionListProps) => {
   const [page, setPage] = useState(1);
 
   const { data } = useSessionListQuery({ timelineId, page });
@@ -25,13 +26,24 @@ export const SessionList = ({ timelineId }: SessionListProps) => {
             options={[{ value: 'RECENT', label: '최신순' }]}
             onChange={() => {}}
           />
-          <Link
-            to="/timeline/$timelineId/session/create"
-            params={{ timelineId: String(timelineId) }}
-            className="cursor-pointer text-2xl font-bold text-white bg-black px-12 py-1"
-          >
-            새 세션
-          </Link>
+          {canWrite ? (
+            <Link
+              to="/timeline/$timelineId/session/create"
+              params={{ timelineId: String(timelineId) }}
+              className="cursor-pointer text-2xl font-bold text-white bg-black px-12 py-1"
+            >
+              새 세션
+            </Link>
+          ) : (
+            <button
+              type="button"
+              disabled
+              title="FRIEND 등급 이상만 세션을 작성할 수 있습니다."
+              className="cursor-not-allowed text-2xl font-bold text-white bg-neutral-400 px-12 py-1"
+            >
+              새 세션
+            </button>
+          )}
         </div>
       </div>
       <div>
@@ -62,6 +74,11 @@ export const SessionList = ({ timelineId }: SessionListProps) => {
                     }}
                     className="font-bold underline"
                   >
+                    {!session.isPublic && (
+                      <span aria-label="비공개" title="비공개 세션">
+                        🔒{' '}
+                      </span>
+                    )}
                     {session.title}
                   </Link>
                 </td>

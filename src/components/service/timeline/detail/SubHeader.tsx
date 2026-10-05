@@ -1,7 +1,7 @@
-import type { TimelineType } from '../../../../types/timeline.type';
+import type { TimelineDetailType } from '../../../../types/timeline.type';
 
 interface SubHeaderProps {
-  timeline: TimelineType;
+  timeline: TimelineDetailType;
 }
 
 export const SubHeader = ({ timeline }: SubHeaderProps) => {
@@ -23,6 +23,9 @@ export const SubHeader = ({ timeline }: SubHeaderProps) => {
         <span>{timeline.isOn ? '온라인' : '오프라인'}</span>
         <span>{timeline.period || '비정기'}</span>
         <span>{new Date(timeline.createdAt).toLocaleDateString()} 생성</span>
+        <span className="text-emerald-700 font-semibold">
+          {timeline.myRole ? `내 등급: ${timeline.myRole}` : '멤버 아님'}
+        </span>
       </div>
     </section>
   );

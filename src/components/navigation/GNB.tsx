@@ -1,15 +1,23 @@
 import { Link, useNavigate } from '@tanstack/react-router';
 import { useAuth } from '../../hooks/useAuth';
-import { requestSignOut } from '../../api/signin';
+import { useConfirm } from '../../hooks/useConfirm';
 
 export default function GNB() {
   const { user, isAuthenticated, logout } = useAuth();
+  const confirm = useConfirm();
   const navigate = useNavigate();
 
   const handleLogout = async () => {
-    await requestSignOut();
-    logout();
-    navigate({ to: '/', replace: true });
+    if (
+      await confirm({
+        title: '로그아웃 하시겠습니까?',
+        confirmText: '로그아웃',
+      })
+    ) {
+      await logout();
+      await navigate({ to: '/login', replace: true });
+      window.location.reload();
+    }
   };
 
   return (

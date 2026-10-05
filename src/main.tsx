@@ -20,8 +20,9 @@ const router = createRouter({
   context: {
     isAuthenticated: false,
     login: () => {},
-    logout: () => {},
+    logout: async () => {},
     user: null,
+    queryClient,
   },
   defaultPreload: 'intent',
   scrollRestoration: true,
@@ -44,6 +45,7 @@ function App() {
       router={router}
       context={{
         ...auth,
+        queryClient,
       }}
     />
   );
