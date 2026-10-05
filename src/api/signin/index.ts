@@ -7,3 +7,10 @@ import type { SignInType } from '../../types/user.type';
 export const requestSignIn = async (data: SignInType) => {
   return await APIInstance.post('/signin', data);
 };
+
+/**
+ * 로그아웃 요청을 보낸다.
+ */
+export const requestSignOut = async () => {
+  return await APIInstance.post('/signin/signout');
+};
