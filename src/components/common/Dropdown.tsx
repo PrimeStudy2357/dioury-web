@@ -25,7 +25,7 @@ export const Dropdown = <T extends string>({
   const selectedLabel = options.find((option) => option.value === value)?.label;
 
   return (
-    <div className="relative inline-block">
+    <div className="relative inline-block whitespace-nowrap">
       <button className="cursor-pointer" onClick={() => setOpen((o) => !o)}>
         <span>{selectedLabel ?? placeholder}</span>
         <span>▾</span>

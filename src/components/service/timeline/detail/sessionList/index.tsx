@@ -22,7 +22,7 @@ export const SessionList = ({ timelineId, canWrite }: SessionListProps) => {
         <span>세션 목록</span>
         <div className="flex gap-4 items-center">
           <Dropdown
-            value={'최신순'}
+            value="RECENT"
             options={[{ value: 'RECENT', label: '최신순' }]}
             onChange={() => {}}
           />

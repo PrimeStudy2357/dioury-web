@@ -2,6 +2,8 @@ import { createFileRoute, redirect } from '@tanstack/react-router';
 import { isAxiosError } from 'axios';
 import { alertDenied, ensureTimelineAccess } from '../../../../-guard';
 import { sessionQueryOptions } from '../../../../../hooks/query/useSessionQuery';
+import { ServiceTemplate } from '../../../../../components/service/ServiceTemplate';
+import { SessionDetail } from '../../../../../components/service/session/detail';
 
 export const Route = createFileRoute(
   '/timeline/$timelineId/session/$sessionId/',
@@ -31,5 +33,14 @@ export const Route = createFileRoute(
 });
 
 function RouteComponent() {
-  return <div>Hello "/timeline/$timelineId/session/$sessionId/"!</div>;
+  const { timelineId, sessionId } = Route.useParams();
+
+  return (
+    <ServiceTemplate>
+      <SessionDetail
+        timelineId={Number(timelineId)}
+        sessionId={Number(sessionId)}
+      />
+    </ServiceTemplate>
+  );
 }

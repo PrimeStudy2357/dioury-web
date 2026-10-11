@@ -1,3 +1,4 @@
+import { Link } from '@tanstack/react-router';
 import type { TimelineDetailType } from '../../../../types/timeline.type';
 
 interface SubHeaderProps {
@@ -6,8 +7,16 @@ interface SubHeaderProps {
 
 export const SubHeader = ({ timeline }: SubHeaderProps) => {
   return (
-    <section className="flex flex-col gap-3 px-6 pt-8 pb-6 border-b-2">
-      <h1 className="text-3xl font-bold">{timeline.name}</h1>
+    <section className="flex flex-col gap-1 px-6 pt-5 pb-4 border-b-2">
+      <h1 className="text-2xl font-bold">
+        <Link
+          to="/timeline/$timelineId"
+          params={{ timelineId: String(timeline.id) }}
+          className="hover:underline"
+        >
+          {timeline.name}
+        </Link>
+      </h1>
       <div className="flex flex-col gap-1">
         <p>{timeline.description}</p>
       </div>
