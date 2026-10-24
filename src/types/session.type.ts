@@ -47,4 +47,6 @@ export type ReactionType = {
   count: number;
   /** 요청자가 이 이모지로 반응했는지 */
   reacted: boolean;
+  /** 반응한 사용자 (먼저 반응한 순) */
+  users: { id: number; nickname: string }[];
 };

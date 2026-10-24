@@ -1,6 +1,7 @@
 import { Suspense, lazy, useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import Popover from '@mui/material/Popover';
+import Tooltip from '@mui/material/Tooltip';
 import AddReactionOutlinedIcon from '@mui/icons-material/AddReactionOutlined';
 import { isAxiosError } from 'axios';
 import clsx from 'clsx';
@@ -58,6 +59,7 @@ export const ReactionBar = ({ sessionId }: ReactionBarProps) => {
           emoji,
           count: 0,
           reacted: false,
+          users: [],
         },
     ),
     ...reactions.filter((r) => !QUICK_EMOJIS.includes(r.emoji)),
@@ -74,23 +76,32 @@ export const ReactionBar = ({ sessionId }: ReactionBarProps) => {
 
   return (
     <div className="flex flex-wrap items-center gap-2 px-6 pt-8">
-      {items.map(({ emoji, count, reacted }) => (
-        <button
+      {items.map(({ emoji, count, reacted, users }) => (
+        <Tooltip
           key={emoji}
-          type="button"
-          disabled={isPending}
-          aria-pressed={reacted}
-          onClick={() => toggle(emoji)}
-          className={clsx(
-            'cursor-pointer flex items-center gap-1 rounded-full border px-3 py-1 text-xl disabled:cursor-wait',
-            reacted
-              ? 'border-black bg-neutral-100 font-bold'
-              : 'border-neutral-300',
-          )}
+          title={users.length > 0 && <ReactorList users={users} />}
+          placement="top"
+          arrow
         >
-          <span>{emoji}</span>
-          {count > 0 && <span>{count}</span>}
-        </button>
+          {/* disabled 버튼은 hover 이벤트가 없어 툴팁이 뜨도록 span으로 감싼다 */}
+          <span>
+            <button
+              type="button"
+              disabled={isPending}
+              aria-pressed={reacted}
+              onClick={() => toggle(emoji)}
+              className={clsx(
+                'cursor-pointer flex items-center gap-1 rounded-full border px-3 py-1 text-xl disabled:cursor-wait',
+                reacted
+                  ? 'border-black bg-neutral-100 font-bold'
+                  : 'border-neutral-300',
+              )}
+            >
+              <span>{emoji}</span>
+              {count > 0 && <span>{count}</span>}
+            </button>
+          </span>
+        </Tooltip>
       ))}
       <button
         type="button"
@@ -121,3 +132,17 @@ export const ReactionBar = ({ sessionId }: ReactionBarProps) => {
     </div>
   );
 };
+
+// 툴팁이 화면을 덮지 않도록 일부만 보여준다
+const MAX_VISIBLE_REACTORS = 15;
+
+const ReactorList = ({ users }: { users: ReactionType['users'] }) => (
+  <ul className="text-sm">
+    {users.slice(0, MAX_VISIBLE_REACTORS).map((user) => (
+      <li key={user.id}>{user.nickname}</li>
+    ))}
+    {users.length > MAX_VISIBLE_REACTORS && (
+      <li>외 {users.length - MAX_VISIBLE_REACTORS}명</li>
+    )}
+  </ul>
+);
