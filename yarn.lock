@@ -2812,6 +2812,11 @@ form-data@^4.0.4:
     hasown "^2.0.2"
     mime-types "^2.1.12"
 
+frimousse@^0.4.0:
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/frimousse/-/frimousse-0.4.0.tgz#3d112dd31d925b59f8651cef6a0cb26eb53f19d0"
+  integrity sha512-wA/1Xt9UTk51wYNpy+EvHKPUA4jdm4NuEFzSNNZxqT0Nxrj4RFwYByjRMuaq4qSLOco/ikDCpLKesB8W1w2q+Q==
+
 fsevents@~2.3.2, fsevents@~2.3.3:
   version "2.3.3"
   resolved "https://registry.yarnpkg.com/fsevents/-/fsevents-2.3.3.tgz#cac6407785d03675a2a5e1a5305c697b347d90d6"

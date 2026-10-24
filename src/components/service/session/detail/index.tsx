@@ -3,13 +3,17 @@ import StarterKit from '@tiptap/starter-kit';
 import { useSessionQuery } from '../../../../hooks/query/useSessionQuery';
 import { useTimelineQuery } from '../../../../hooks/query/useTimelineQuery';
 import { SubHeader } from '../../timeline/detail/SubHeader';
+import { ReactionBar } from './ReactionBar';
 
 interface SessionDetailProps {
   timelineId: number;
   sessionId: number;
 }
 
-export const SessionDetail = ({ timelineId, sessionId }: SessionDetailProps) => {
+export const SessionDetail = ({
+  timelineId,
+  sessionId,
+}: SessionDetailProps) => {
   const { data: timeline } = useTimelineQuery(timelineId);
   const { data: session } = useSessionQuery(sessionId);
 
@@ -47,6 +51,7 @@ export const SessionDetail = ({ timelineId, sessionId }: SessionDetailProps) => 
           </div>
         </div>
         <EditorContent editor={editor} className="text-xl px-6 pt-6" />
+        <ReactionBar sessionId={sessionId} />
       </article>
     </>
   );

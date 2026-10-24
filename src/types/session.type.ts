@@ -41,3 +41,10 @@ export type GetSessionListParams = {
   sortBy?: SessionListSortBy;
   order?: ListOrder;
 };
+
+export type ReactionType = {
+  emoji: string;
+  count: number;
+  /** 요청자가 이 이모지로 반응했는지 */
+  reacted: boolean;
+};
