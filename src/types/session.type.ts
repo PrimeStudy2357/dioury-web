@@ -51,7 +51,7 @@ export type ReactionType = {
   users: { id: number; nickname: string }[];
 };
 
-export type CommentType = {
+export type ReplyType = {
   id: number;
   content: string;
   createdAt: string;
@@ -59,3 +59,19 @@ export type CommentType = {
   /** 요청자가 작성한 댓글인지 */
   isMine: boolean;
 };
+
+/** 최상위 댓글. 답글이 남은 채 삭제되면 내용·작성자 없이 자리만 남는다 */
+export type CommentType = {
+  id: number;
+  createdAt: string;
+  /** 작성 순 */
+  replies: ReplyType[];
+} & (
+  | {
+      isDeleted: false;
+      content: string;
+      user: { id: number; nickname: string };
+      isMine: boolean;
+    }
+  | { isDeleted: true; content: null; user: null; isMine: false }
+);

@@ -89,14 +89,15 @@ export const requestGetComments = async (sessionId: number) => {
   return data.data;
 };
 
-/** 갱신된 댓글 목록을 반환 */
+/** 갱신된 댓글 목록을 반환. parentId를 넘기면 해당 댓글의 답글로 작성 */
 export const requestCreateComment = async (
   sessionId: number,
   content: string,
+  parentId?: number,
 ) => {
   const { data } = await APIInstance.post<CommentListRawResponse>(
     `/session/${sessionId}/comment`,
-    { content },
+    { content, parentId },
   );
 
   return data.data;
