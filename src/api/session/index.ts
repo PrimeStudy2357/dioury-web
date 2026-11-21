@@ -1,5 +1,6 @@
 import APIInstance from '..';
 import type {
+  CommentType,
   CreateSessionType,
   GetSessionListParams,
   ReactionType,
@@ -20,6 +21,11 @@ type GetSessionRawResponse = {
 type ReactionListRawResponse = {
   success: boolean;
   data: ReactionType[];
+};
+
+type CommentListRawResponse = {
+  success: boolean;
+  data: CommentType[];
 };
 
 type GetSessionListRawResponse = {
@@ -70,6 +76,39 @@ export const requestToggleReaction = async (
   const { data } = await APIInstance.post<ReactionListRawResponse>(
     `/session/${sessionId}/reaction`,
     { emoji },
+  );
+
+  return data.data;
+};
+
+export const requestGetComments = async (sessionId: number) => {
+  const { data } = await APIInstance.get<CommentListRawResponse>(
+    `/session/${sessionId}/comment`,
+  );
+
+  return data.data;
+};
+
+/** 갱신된 댓글 목록을 반환 */
+export const requestCreateComment = async (
+  sessionId: number,
+  content: string,
+) => {
+  const { data } = await APIInstance.post<CommentListRawResponse>(
+    `/session/${sessionId}/comment`,
+    { content },
+  );
+
+  return data.data;
+};
+
+/** 갱신된 댓글 목록을 반환 */
+export const requestDeleteComment = async (
+  sessionId: number,
+  commentId: number,
+) => {
+  const { data } = await APIInstance.delete<CommentListRawResponse>(
+    `/session/${sessionId}/comment/${commentId}`,
   );
 
   return data.data;

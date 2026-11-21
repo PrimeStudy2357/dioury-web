@@ -3,6 +3,7 @@ import StarterKit from '@tiptap/starter-kit';
 import { useSessionQuery } from '../../../../hooks/query/useSessionQuery';
 import { useTimelineQuery } from '../../../../hooks/query/useTimelineQuery';
 import { SubHeader } from '../../timeline/detail/SubHeader';
+import { CommentSection } from './CommentSection';
 import { ReactionBar } from './ReactionBar';
 
 interface SessionDetailProps {
@@ -52,6 +53,7 @@ export const SessionDetail = ({
         </div>
         <EditorContent editor={editor} className="text-xl px-6 pt-6" />
         <ReactionBar sessionId={sessionId} />
+        <CommentSection sessionId={sessionId} />
       </article>
     </>
   );

@@ -50,3 +50,12 @@ export type ReactionType = {
   /** 반응한 사용자 (먼저 반응한 순) */
   users: { id: number; nickname: string }[];
 };
+
+export type CommentType = {
+  id: number;
+  content: string;
+  createdAt: string;
+  user: { id: number; nickname: string };
+  /** 요청자가 작성한 댓글인지 */
+  isMine: boolean;
+};
